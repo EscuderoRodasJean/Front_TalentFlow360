@@ -18,7 +18,7 @@ test('portada y móvil mantienen contenido visible sin desplazamiento horizontal
 test('la ruta privada solicita autenticación', async ({ page }) => {
   await page.goto('/app/indicadores');
   await expect(page).toHaveURL(/ingresar/);
-  await expect(page.getByLabel('Contraseña')).toBeVisible();
+  await expect(page.getByLabel('Contraseña', { exact: true })).toBeVisible();
 });
 test('registro valida datos y permite crear cuenta', async ({ page }) => {
   await backend(page);
@@ -28,7 +28,7 @@ test('registro valida datos y permite crear cuenta', async ({ page }) => {
   await page.getByLabel('Nombre', { exact: true }).fill('Lucía');
   await page.getByLabel('Apellido', { exact: true }).fill('Rivera');
   await page.getByLabel('Correo electrónico').fill('lucia@example.test');
-  await page.getByLabel('Contraseña').fill('Pruebas360!');
+  await page.getByLabel('Contraseña', { exact: true }).fill('Pruebas360!');
   await page.getByRole('button', { name: 'Crear cuenta', exact: true }).click();
   await expect(page).toHaveURL(/ingresar/);
 });
@@ -66,14 +66,14 @@ test('un perfil inexistente se puede registrar y completar', async ({ page }) =>
   await expect(
     page.getByText('Perfil actualizado. Tu completitud fue recalculada por el servidor.'),
   ).toBeVisible();
-  await page.getByRole('button', { name: 'educación', exact: true }).click();
+  await page.getByRole('tab', { name: 'educación', exact: true }).click();
   await expect(page.getByLabel('Institución')).toBeVisible();
 });
 test('el postulante no tiene acceso a usuarios aunque conozca la ruta', async ({ page }) => {
   await backend(page);
   await page.goto('/app/usuarios');
   await page.getByLabel('Correo electrónico').fill('lucia@example.test');
-  await page.getByLabel('Contraseña').fill('Pruebas360!');
+  await page.getByLabel('Contraseña', { exact: true }).fill('Pruebas360!');
   await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click();
   await expect(page).toHaveURL(/sin-acceso/);
 });
@@ -106,7 +106,7 @@ test('estado vacío y menú móvil son utilizables', async ({ page }) => {
   await backend(page, { emptyJobs: true });
   await signIn(page);
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.getByRole('button', { name: 'Abrir menú' }).click();
+  await page.getByRole('button', { name: 'Abrir menú', exact: true }).click();
   await page.getByRole('link', { name: 'Oportunidades', exact: true }).click();
   await expect(page.getByText('No hay vacantes que coincidan.')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -166,8 +166,81 @@ test('el evaluador registra criterios y envía la evaluación al contrato real',
 test('cerrar sesión vuelve al login y limpia el acceso privado', async ({ page }) => {
   await backend(page);
   await signIn(page);
+  await page.getByRole('button', { name: 'Abrir menú de cuenta' }).click();
   await page.getByRole('button', { name: 'Cerrar sesión' }).click();
   await expect(page).toHaveURL(/ingresar/);
   await page.goto('/app/inicio');
   await expect(page).toHaveURL(/ingresar/);
+});
+
+test('espacio personal con perfil, actividad, empresas y menú del avatar', async ({ page }) => {
+  await backend(page);
+  await signIn(page);
+  await expect(page.locator('.opportunity-row')).toHaveCount(5);
+  await expect(page.locator('.activity-card').first()).toContainText('1 Postulación');
+  if (previews)
+    await page.screenshot({ path: path.join(previews, '06-espacio-personal.png'), fullPage: true });
+  await page.getByRole('tab', { name: 'Empresas', exact: true }).click();
+  await expect(page.locator('.company-grid>a')).toHaveCount(3);
+  await page.getByRole('tab', { name: 'Oportunidades', exact: true }).click();
+  await page.getByRole('button', { name: 'Abrir menú de cuenta' }).click();
+  const account = page.getByRole('dialog', { name: 'Opciones de cuenta' });
+  await expect(account).toBeVisible();
+  await expect(account.getByRole('link', { name: 'Equipo y accesos' })).toHaveCount(0);
+  if (previews) await page.screenshot({ path: path.join(previews, '07-menu-de-cuenta.png') });
+  await page.keyboard.press('Escape');
+  await expect(account).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Abrir menú de cuenta' })).toBeFocused();
+  await page.getByRole('link', { name: 'Mi perfil', exact: true }).click();
+  await expect(page.getByLabel('Tu perfil profesional')).toHaveValue(
+    'Estudiante de Ingeniería de Sistemas',
+  );
+  if (previews)
+    await page.screenshot({ path: path.join(previews, '08-perfil.png'), fullPage: true });
+});
+test('login permite mostrar contraseña y explica proveedores aún no integrados', async ({
+  page,
+}) => {
+  await page.goto('/ingresar');
+  await expect(page.getByRole('button', { name: 'Iniciar sesión', exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: /Continuar con Google/ })).toBeDisabled();
+  await expect(page.getByRole('button', { name: /Acceder con LinkedIn/ })).toBeDisabled();
+  await page.getByRole('tab', { name: 'Equipo de selección', exact: true }).click();
+  await expect(
+    page.getByText('Acceso para reclutadores, evaluadores, coordinadores y administradores.'),
+  ).toBeVisible();
+  await page.getByLabel('Contraseña', { exact: true }).fill('Pruebas360!');
+  await page.getByRole('button', { name: 'Mostrar contraseña' }).click();
+  await expect(page.getByLabel('Contraseña', { exact: true })).toHaveAttribute('type', 'text');
+  await page.getByRole('button', { name: 'Ocultar contraseña' }).click();
+  await page.getByLabel('Contraseña', { exact: true }).fill('');
+  if (previews)
+    await page.screenshot({ path: path.join(previews, '09-ingreso.png'), fullPage: true });
+});
+test('búsqueda pública conserva puesto y ubicación después de ingresar', async ({ page }) => {
+  await backend(page);
+  await page.goto('/');
+  await page.getByRole('textbox', { name: 'Puesto, empresa o palabra clave' }).fill('Frontend');
+  await page.getByRole('combobox', { name: 'Lugar de trabajo' }).selectOption('Lima');
+  await page.getByRole('button', { name: 'Buscar prácticas' }).click();
+  await expect(page).toHaveURL(/ingresar/);
+  await page.getByLabel('Correo electrónico').fill('lucia@example.test');
+  await page.getByLabel('Contraseña', { exact: true }).fill('Pruebas360!');
+  await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click();
+  await expect(page).toHaveURL(/app\/vacantes\?/);
+  await expect(page.getByLabel('Puesto, empresa o lugar')).toHaveValue('Frontend');
+  await expect(page.getByLabel('Lugar de trabajo')).toHaveValue('Lima');
+  await expect(page.locator('.job-card')).toHaveCount(4);
+});
+test('el espacio personal se adapta a móvil y el avatar sigue accesible', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await backend(page);
+  await signIn(page);
+  await expect(page.locator('.opportunity-row')).toHaveCount(5);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  if (previews)
+    await page.screenshot({ path: path.join(previews, '10-espacio-movil.png'), fullPage: true });
+  await page.getByRole('button', { name: 'Abrir menú de cuenta' }).click();
+  await expect(page.getByRole('dialog', { name: 'Opciones de cuenta' })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });

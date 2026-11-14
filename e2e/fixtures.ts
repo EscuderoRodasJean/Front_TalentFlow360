@@ -59,7 +59,7 @@ export async function backend(
     resumenProfesional: 'Estudiante de Ingeniería de Sistemas',
     telefono: '900000001',
     direccion: 'Lima',
-    porcentajeCompletitud: 67,
+    porcentajeCompletitud: 83,
     perfilCompleto: false,
     educaciones: [
       {
@@ -269,7 +269,7 @@ export async function backend(
 export async function signIn(page: Page, email = 'lucia@example.test') {
   await page.goto('/ingresar');
   await page.getByLabel('Correo electrónico').fill(email);
-  await page.getByLabel('Contraseña').fill('Pruebas360!');
+  await page.getByLabel('Contraseña', { exact: true }).fill('Pruebas360!');
   await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click();
   await page.waitForURL('**/app/inicio');
 }
