@@ -40,7 +40,7 @@ src/app/
   shared/forms/         formularios reactivos y listas de criterios
   shared/ui/            iconos, estados, carga y errores
   features/
-    welcome/ auth/ home/
+    welcome/ companies/ auth/ home/
     profile/ vacancies/ applications/
     interviews/ evaluations/ dashboard/ users/
 e2e/                    contratos de prueba y recorridos de navegador
@@ -52,7 +52,7 @@ Los componentes se cargan por ruta. El JWT se conserva en memoria y se elimina a
 
 ## Diseño del portal
 
-Portada con banner ilustrado, búsqueda por puesto y ubicación, áreas profesionales y footer. El espacio personal presenta resumen de perfil, oportunidades, empresas de la API y actividad del usuario. La cabecera ofrece un menú accesible al pulsar el avatar. El perfil conserva sus formularios en la nueva composición. Los botones de Google/LinkedIn tienen sus colores habituales y muestran un aviso al pulsarlos hasta integrar OAuth en Spring. Los detalles de generación de imágenes están en [recursos visuales](docs/recursos-visuales.json).
+Portada con banner ilustrado, búsqueda por puesto y ubicación, carrusel automático de logos oficiales y footer. El directorio público `/empresas` permite buscar por nombre, filtrar por sector y abrir la ficha de cada empresa. Las vacantes se consultan con sesión y se cuentan a partir de la API. El espacio personal presenta resumen de perfil, oportunidades, empresas de la API y actividad del usuario. La cabecera ofrece un menú accesible al pulsar el avatar. El perfil conserva sus formularios en la nueva composición. Los botones de Google/LinkedIn tienen sus colores habituales y muestran un aviso al pulsarlos hasta integrar OAuth en Spring. Ver [empresas y fuentes de logos](docs/EMPRESAS.md) y [recursos visuales](docs/recursos-visuales.json).
 
 ## Estado de integración
 

@@ -26,6 +26,7 @@ flowchart LR
 | Ruta | Roles de interfaz | Comportamiento |
 |---|---|---|
 | `/`, `/ingresar`, `/registro` | Público | Presentación, login y registro de postulante |
+| `/empresas`, `/empresas/:slug` | Público | Directorio y fichas corporativas; las vacantes requieren sesión |
 | `/app/inicio`, `/app/vacantes` | Todos autenticados | Inicio y vacantes; el postulante ve las publicadas |
 | `/app/perfil` | Postulante | Contacto, educación, experiencia, habilidades y completitud |
 | `/app/vacantes/nueva` | Reclutador, coordinador, administrador | Borrador con requisitos y pesos |
@@ -54,11 +55,11 @@ La API actual devuelve arrays completos y no soporta paginación ni filtros de s
 
 ## Identidad visual
 
-Fondo gris azulado `#eef1f8`, azul principal `#2639e8` y degradados rosa, violeta y celeste. Tipografía local Segoe UI, cabecera horizontal, menú del avatar y espacio personal en tres columnas. El logo conserva el emblema original con flecha ascendente, recoloreado en azul y lavanda para la cabecera y el favicon. La portada usa ilustraciones 3D propias generadas para TalentFlow360 y optimizadas en WebP. No se usan marcas ni fotografías de las referencias.
+Fondo gris azulado `#eef1f8`, azul principal `#2639e8` y degradados rosa, violeta y celeste. Tipografía local Segoe UI, cabecera horizontal, menú del avatar y espacio personal en tres columnas. El logo conserva el emblema original con flecha ascendente, recoloreado en azul y lavanda para la cabecera y el favicon. La portada usa ilustraciones 3D propias generadas para TalentFlow360 y optimizadas en WebP. Los logos del directorio proceden de los sitios oficiales de cada empresa, con sus colores y proporciones originales; sus fuentes están en `docs/logos-empresas.json`.
 
 El selector Postulante/Equipo orienta el acceso, pero no decide el rol: este siempre llega de la sesión validada por el backend. Google y LinkedIn conservan su aspecto habitual a color. Al pulsarlos muestran un aviso de que el acceso aún no está disponible, porque no existen endpoints OAuth en el backend actual. Los botones no autentican ni simulan una sesión. La ayuda de acceso también informa que la recuperación automática aún no está disponible.
 
-Brand, Footer, CategoryLinks y OpportunitySearch son componentes compartidos. El buscador conserva puesto y ubicación a través del login. Las empresas del espacio personal se derivan exclusivamente de las vacantes publicadas que devuelve la API. Los iconos de sectores de la portada son áreas profesionales, no logos de supuestas empresas asociadas.
+Brand, Footer, PublicHeader, CategoryLinks y OpportunitySearch son componentes compartidos. El buscador conserva puesto y ubicación a través del login. Las empresas del espacio personal se derivan exclusivamente de las vacantes publicadas que devuelve la API. El directorio público es un catálogo informativo local de seis empresas; su presencia no acredita una alianza ni vacantes activas. `CompanyVacancies` consulta la API solo con sesión, filtra las publicadas y las relaciona por nombres equivalentes explícitos. No inventa calificaciones, seguidores ni cifras de contratación. Ver `docs/EMPRESAS.md`.
 
 Los recursos y sus prompts exactos se registran en `docs/recursos-visuales.json`. El presupuesto de estilos por componente se ajustó al portal visual: advertencia de 12 kB y error de 16 kB. El presupuesto inicial de JavaScript se conserva en 500 kB de advertencia y 1 MB de error.
 

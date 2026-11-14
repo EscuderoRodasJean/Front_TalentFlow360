@@ -1,0 +1,36 @@
+{
+  "retrievedAt": "2026-11-14",
+  "origin": "Recursos originales enlazados en los sitios corporativos. Se conservan los colores y proporciones de cada logo.",
+  "assets": [
+    {
+      "file": "public/images/companies/alicorp.svg",
+      "source": "https://www.alicorp.com.pe/images/logo-alicorp-header.svg",
+      "sha256": "25bdfff603c8f9f10f8c1edddd1d657e0d06ee41d9a35dba6881442f8ac7f7c8"
+    },
+    {
+      "file": "public/images/companies/backus-white.png",
+      "source": "https://www.backus.pe/sites/g/files/seuoyk181/files/header/backus-white.png",
+      "sha256": "dc02e2f21ffeacec83bf68ffa7156d063391923dd658b71a626044c7d5b9827b"
+    },
+    {
+      "file": "public/images/companies/compartamos.svg",
+      "source": "https://www.compartamos.com.pe/documents/51731/126400/Logo+Banco.svg/0a87eefc-08d8-4d31-5d20-f81b3535e8bd?version=1.0",
+      "sha256": "8360ac88e83ba2c1e14b8cbc957cb2049511ae52f3e0112297d032a4fbba15c6"
+    },
+    {
+      "file": "public/images/companies/ferreyros.png",
+      "source": "https://www.ferreyros.com.pe/wp-content/themes/ferreyros/images/logo.png",
+      "sha256": "7ea657e46429ed30852251b5d33606de3d0e50d99f84b206bbb44abe7906941a"
+    },
+    {
+      "file": "public/images/companies/gloria.svg",
+      "source": "https://www.gloria.com.pe/logogloria3.svg",
+      "sha256": "c91d32a6e0ba8dbb3f0c0cd47f1341f6b91d71a48cd66f88ce1240a245d7af91"
+    },
+    {
+      "file": "public/images/companies/pacasmayo.webp",
+      "source": "https://storage.googleapis.com/shield-public-bucket-prd/Images/74c15bd9-6f54-4a82-99a3-2eed4b29c9f1-pacasmayo-logo-original.webp",
+      "sha256": "b2458d68fc2b76c311857c21ab78a404fb0b4f16cb57b74cdc29b112f3363e54"
+    }
+  ]
+}
