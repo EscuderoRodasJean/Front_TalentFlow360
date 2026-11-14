@@ -21,7 +21,8 @@ import { Brand } from './brand';
       </section>
       <section>
         <h2>Sobre TalentFlow360</h2>
-        <a routerLink="/" fragment="como-funciona">Cómo funciona</a
+        <a routerLink="/empresas">Conocer empresas</a
+        ><a routerLink="/" fragment="como-funciona">Cómo funciona</a
         ><a routerLink="/" fragment="matching">Matching explicable</a
         ><a routerLink="/ingresar" [queryParams]="{ acceso: 'equipo' }"
           >Acceso del equipo de selección</a

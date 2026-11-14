@@ -30,6 +30,9 @@ import { Component, input } from '@angular/core';
 export class Icon {
   readonly name = input('grid');
   readonly paths: Record<string, string> = {
+    pause: 'M8 4v16 M16 4v16',
+    play: 'M7 3l14 9-14 9z',
+    external: 'M14 3h7v7 M21 3 10 14 M10 3H3v18h18v-7',
     code: 'M8 5 2 12l6 7 M16 5l6 7-6 7 M14 3l-4 18',
     chevron: 'm6 9 6 6 6-6',
     lock: 'M5 10h14v11H5z M8 10V6a4 4 0 0 1 8 0v4 M12 14v3',

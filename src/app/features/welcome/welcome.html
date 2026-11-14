@@ -1,21 +1,4 @@
-<header class="public-header">
-  <div class="header-main">
-    <tf-brand />
-    <nav aria-label="Acceso público">
-      <a class="team-link" routerLink="/ingresar" [queryParams]="{ acceso: 'equipo' }"
-        >Equipo de selección</a
-      ><a class="create-link" routerLink="/registro">Crear cuenta</a
-      ><a class="btn primary" routerLink="/ingresar">Ingresar</a>
-    </nav>
-  </div>
-  <div class="header-sub">
-    <div>
-      <a href="#como-funciona">Descubre TalentFlow <span>⌄</span></a
-      ><i></i><a href="#sectores"><tf-icon name="briefcase" />Áreas profesionales</a>
-    </div>
-    <a href="#matching"><tf-icon name="spark" />Matching explicable</a>
-  </div>
-</header>
+<tf-public-header />
 <main>
   <section class="public-hero">
     <div class="hero-inner">
@@ -51,22 +34,7 @@
     <section class="category-section" aria-label="Áreas de oportunidades">
       <tf-category-links />
     </section>
-    <section class="sectors" id="sectores">
-      <span class="section-eyebrow">DA EL SIGUIENTE PASO</span>
-      <h2>Tu futuro puede empezar en muchos lugares.</h2>
-      <p>Descubre áreas en las que tus competencias pueden hacer la diferencia.</p>
-      <div class="sector-grid">
-        @for (s of sectors; track s.name) {
-          <a routerLink="/app/vacantes" [queryParams]="{ q: s.query }" [class]="'sector ' + s.color"
-            ><span>{{ s.initial }}</span
-            ><strong>{{ s.name }}</strong></a
-          >
-        }
-      </div>
-      <a class="btn secondary" routerLink="/app/vacantes"
-        ><tf-icon name="briefcase" />Explorar oportunidades</a
-      >
-    </section>
+    <tf-company-carousel />
     <section class="how-section" id="como-funciona">
       <div class="how-heading">
         <span class="section-eyebrow">MÁS QUE ENVIAR UNA POSTULACIÓN</span>

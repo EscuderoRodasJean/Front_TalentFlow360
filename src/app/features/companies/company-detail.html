@@ -1,0 +1,125 @@
+<tf-public-header [compactSearch]="true" />
+<main class="company-profile">
+  <a routerLink="/empresas" class="company-back"><tf-icon name="arrow" />Todas las empresas</a>
+  @if (company(); as c) {
+    <section
+      class="company-profile-hero"
+      [style.--brand-color]="c.color"
+      [style.--brand-accent]="c.accent"
+    >
+      <div class="profile-cover">
+        <span>{{ c.name }}</span>
+        <div></div>
+      </div>
+      <div class="profile-company-logo"><tf-company-logo [company]="c" [eager]="true" /></div>
+      <div class="profile-company-summary">
+        <div>
+          <span class="company-industry">{{ c.sector }}</span>
+          <h1>{{ c.name }}</h1>
+          <p><tf-icon name="pin" />Presencia en Perú</p>
+        </div>
+        <a [href]="c.website" target="_blank" rel="noopener noreferrer" class="btn secondary"
+          >Visitar sitio oficial <tf-icon name="external"
+        /></a>
+      </div>
+    </section>
+    <div class="company-profile-grid">
+      <section class="panel about-company">
+        <h2>Conoce a {{ c.name }}</h2>
+        <p>{{ c.description }}</p>
+        <div class="company-facts">
+          <div>
+            <tf-icon name="briefcase" /><span
+              >Sector<strong>{{ c.sector }}</strong></span
+            >
+          </div>
+          <div>
+            <tf-icon name="pin" /><span>Mercado<strong>Perú</strong></span>
+          </div>
+        </div>
+        <a [href]="c.website" target="_blank" rel="noopener noreferrer" class="official-source"
+          >Información de su sitio corporativo <tf-icon name="external"
+        /></a>
+      </section>
+      <aside class="company-discovery">
+        <tf-icon name="spark" />
+        <h2>Elige con más contexto.</h2>
+        <p>
+          Conocer una empresa es un buen punto de partida para conectar tus competencias con sus
+          oportunidades.
+        </p>
+        <a routerLink="/app/perfil">Revisar mi perfil <span>›</span></a>
+      </aside>
+      <section class="panel company-vacancies" aria-labelledby="company-vacancies-heading">
+        <div class="vacancies-heading">
+          <div>
+            <h2 id="company-vacancies-heading">Oportunidades en TalentFlow360</h2>
+            <p>Vacantes publicadas y registradas para esta empresa.</p>
+          </div>
+          @if (vacancies.count(c) !== null) {
+            <span class="count-badge"
+              >{{ vacancies.count(c) }}
+              {{ vacancies.count(c) === 1 ? 'vacante' : 'vacantes' }}</span
+            >
+          }
+        </div>
+        @if (!vacancies.signedIn()) {
+          <div class="vacancies-prompt">
+            <span><tf-icon name="lock" /></span>
+            <h3>Ingresa para consultar las oportunidades.</h3>
+            <p>
+              Continúa con tu cuenta para ver las vacantes que esta empresa tenga registradas en
+              TalentFlow360.
+            </p>
+            <a
+              routerLink="/ingresar"
+              [queryParams]="{ returnUrl: '/empresas/' + c.slug }"
+              class="btn primary"
+              >Ingresar para consultar <tf-icon name="arrow"
+            /></a>
+          </div>
+        } @else if (vacancies.loading()) {
+          <p class="state" role="status">Consultando vacantes…</p>
+        } @else if (vacancies.error()) {
+          <div class="state error" role="alert">
+            <p>{{ vacancies.error() }}</p>
+            <button class="btn secondary" (click)="vacancies.load()">Reintentar</button>
+          </div>
+        } @else {
+          <div class="company-job-list">
+            @for (job of vacancies.forCompany(c); track job.id) {
+              <a [routerLink]="['/app/vacantes', job.id]"
+                ><div>
+                  <h3>{{ job.titulo }}</h3>
+                  <p>{{ job.ubicacion || 'Ubicación por definir' }} · {{ job.modalidad }}</p>
+                </div>
+                <tf-status [value]="job.estado" /><tf-icon name="arrow"
+              /></a>
+            } @empty {
+              <div class="vacancies-prompt">
+                <span><tf-icon name="briefcase" /></span>
+                <h3>Aún no hay vacantes publicadas de esta empresa en TalentFlow360.</h3>
+                <p>Puedes explorar otras oportunidades registradas en la plataforma.</p>
+                <a routerLink="/app/vacantes" class="btn secondary"
+                  >Explorar oportunidades <tf-icon name="arrow"
+                /></a>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    </div>
+    <p class="company-profile-note">
+      Información corporativa obtenida de su sitio oficial. Las oportunidades de esta página
+      corresponden a vacantes publicadas en TalentFlow360.
+    </p>
+  } @else {
+    <section class="panel company-not-found">
+      <tf-icon name="search" />
+      <h1>No encontramos esta empresa.</h1>
+      <p>Explora el directorio para conocer otras empresas.</p>
+      <a routerLink="/empresas" class="btn primary">Volver al directorio</a>
+    </section>
+  }
+</main>
+<tf-footer />

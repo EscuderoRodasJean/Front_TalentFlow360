@@ -1,0 +1,152 @@
+:host {
+  display: block;
+}
+.public-header {
+  background: white;
+  box-shadow: 0 3px 12px #2432600a;
+  position: relative;
+  z-index: 5;
+}
+.header-main,
+.header-sub {
+  max-width: 1440px;
+  margin: auto;
+  padding: 18px 35px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+}
+.header-main nav {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.header-main .btn {
+  font-size: 13px;
+  padding: 11px 24px;
+}
+.team-link {
+  color: #58617c;
+  font-size: 12px;
+}
+.create-link {
+  border: 1px solid #2639e8;
+  color: #2639e8;
+  border-radius: 8px;
+  padding: 9px 17px;
+  font-size: 13px;
+}
+.header-sub {
+  padding-top: 0;
+  padding-bottom: 14px;
+  font-size: 12px;
+  color: #787f98;
+}
+.header-sub > div,
+.header-sub a {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.header-sub > div {
+  gap: 22px;
+}
+.header-sub span {
+  color: #2639e8;
+}
+.header-sub i {
+  height: 14px;
+  width: 1px;
+  background: #d7dce9;
+}
+.header-sub > a {
+  color: #7883b6;
+}
+.header-search {
+  flex: 1;
+  max-width: 600px;
+}
+.header-search tf-opportunity-search {
+  font-size: 12px;
+}
+:host ::ng-deep .header-search .opportunity-search {
+  border: 1px solid #e0e4ef;
+  background: #f8f9fd;
+  box-shadow: none;
+  padding: 3px;
+  border-radius: 9px;
+}
+:host ::ng-deep .header-search .opportunity-search .btn {
+  font-size: 11px;
+  padding: 10px;
+  min-height: 38px;
+}
+:host ::ng-deep .header-search .opportunity-search input,
+:host ::ng-deep .header-search .opportunity-search select {
+  font-size: 11px;
+}
+:host ::ng-deep .header-search .opportunity-search label {
+  padding: 7px;
+  gap: 8px;
+}
+@media (max-width: 1150px) {
+  .team-link {
+    display: none;
+  }
+  .header-main,
+  .header-sub {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+  .header-main {
+    gap: 20px;
+  }
+  .header-main nav {
+    gap: 12px;
+  }
+  .header-search {
+    max-width: 510px;
+  }
+  .header-main .btn {
+    padding: 10px 16px;
+  }
+  .create-link {
+    padding: 9px 12px;
+  }
+}
+@media (max-width: 900px) {
+  .header-search {
+    display: none;
+  }
+  .header-main {
+    padding: 16px 22px;
+  }
+  .header-sub {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+}
+@media (max-width: 520px) {
+  .create-link {
+    display: none;
+  }
+  .header-sub {
+    font-size: 10px;
+    gap: 10px;
+  }
+  .header-sub > div {
+    gap: 13px;
+  }
+  .header-sub > div > a:first-child {
+    display: none;
+  }
+  .header-sub i {
+    display: none;
+  }
+  .header-main .btn {
+    font-size: 12px;
+  }
+}

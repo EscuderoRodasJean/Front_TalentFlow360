@@ -1,0 +1,179 @@
+<tf-public-header [compactSearch]="true" />
+<main class="company-directory">
+  <header class="directory-heading">
+    <div>
+      <span>ENCUENTRA TU PRÓXIMO EQUIPO</span>
+      <h1>Conoce a las empresas.</h1>
+      <p>Explora su actividad, conoce sus sectores y encuentra oportunidades en TalentFlow360.</p>
+    </div>
+    <span class="heading-symbol"><tf-icon name="briefcase" /></span>
+  </header>
+  <section class="featured-section" aria-labelledby="featured-title">
+    <div class="featured-heading">
+      <h2 id="featured-title">Empresas para descubrir</h2>
+      <span>Información de sus sitios oficiales</span>
+    </div>
+    <div class="featured-grid">
+      @for (company of featured; track company.slug) {
+        <a
+          class="featured-company"
+          [routerLink]="['/empresas', company.slug]"
+          [style.--company-color]="company.color"
+          [style.--company-accent]="company.accent"
+          ><div class="featured-cover">
+            <span>{{ company.name }}</span>
+          </div>
+          <div class="featured-logo"><tf-company-logo [company]="company" [eager]="true" /></div>
+          <h3>{{ company.name }}</h3>
+          <p>{{ company.sector }}</p>
+          <div class="featured-footer">
+            <span><tf-icon name="pin" />Perú</span
+            ><strong>Conocer empresa <tf-icon name="arrow" /></strong></div
+        ></a>
+      }
+    </div>
+  </section>
+  <section class="directory-body">
+    <aside class="company-filters">
+      <div class="filter-card">
+        <h2><tf-icon name="briefcase" />Búsqueda por empresa</h2>
+        <label class="sr-only" for="company-query">Nombre o palabra clave de empresa</label
+        ><input
+          id="company-query"
+          placeholder="Ingresa una empresa"
+          [ngModel]="query()"
+          (ngModelChange)="query.set($event)"
+        />
+      </div>
+      <div class="filter-card">
+        <label for="company-sector"><tf-icon name="layers" />Sector de actividad</label
+        ><select id="company-sector" [ngModel]="sector()" (ngModelChange)="sector.set($event)">
+          <option value="">Todos los sectores</option>
+          @for (s of sectors; track s) {
+            <option>{{ s }}</option>
+          }
+        </select>
+        <div class="filter-scope">
+          <tf-icon name="pin" />
+          <div>
+            <strong>Empresas con presencia en Perú</strong
+            ><small>Información corporativa pública</small>
+          </div>
+        </div>
+        <button class="clear-filters" (click)="reset()">
+          <tf-icon name="close" />Limpiar filtros
+        </button>
+      </div>
+      <section class="filter-note">
+        <tf-icon name="spark" />
+        <h2>Conoce antes de postular.</h2>
+        <p>Entender lo que hace una empresa puede ayudarte a elegir tu siguiente paso.</p>
+      </section>
+    </aside>
+    <div class="directory-results">
+      <div class="directory-tabs" role="tablist" aria-label="Vista de empresas">
+        <button
+          role="tab"
+          [attr.aria-selected]="tab() === 'all'"
+          [class.active]="tab() === 'all'"
+          (click)="tab.set('all')"
+        >
+          Todas las empresas</button
+        ><button
+          role="tab"
+          [attr.aria-selected]="tab() === 'opportunities'"
+          [class.active]="tab() === 'opportunities'"
+          (click)="tab.set('opportunities')"
+        >
+          Con oportunidades
+        </button>
+      </div>
+      @if (tab() === 'opportunities' && !vacancies.signedIn()) {
+        <div class="company-notice">
+          <tf-icon name="lock" />
+          <p>Ingresa para consultar las vacantes registradas de estas empresas en TalentFlow360.</p>
+          <a routerLink="/ingresar" [queryParams]="{ returnUrl: '/empresas' }"
+            >Ingresar <span>›</span></a
+          >
+        </div>
+      }
+      @if (vacancies.error()) {
+        <div class="company-notice error" role="alert">
+          <p>No pudimos consultar las vacantes: {{ vacancies.error() }}</p>
+          <button class="text-link" (click)="vacancies.load()">Reintentar</button>
+        </div>
+      }
+      <div class="results-toolbar">
+        <span
+          ><strong>{{ filtered().length }}</strong>
+          {{ filtered().length === 1 ? 'empresa encontrada' : 'empresas encontradas' }} en el
+          directorio</span
+        ><label
+          >Ordenar por
+          <select
+            aria-label="Ordenar empresas"
+            [ngModel]="sort()"
+            (ngModelChange)="sort.set($event)"
+          >
+            <option value="nombre">Nombre</option>
+            <option value="sector">Sector</option>
+          </select></label
+        >
+      </div>
+      <div class="company-results-list">
+        @for (company of filtered(); track company.slug) {
+          <article class="company-result">
+            <a class="company-result-main" [routerLink]="['/empresas', company.slug]"
+              ><span class="result-logo"><tf-company-logo [company]="company" /></span>
+              <div>
+                <h2>{{ company.name }}</h2>
+                <span>{{ company.sector }}</span>
+              </div></a
+            >
+            <div class="result-meta">
+              <span><tf-icon name="pin" />Presencia en Perú</span
+              ><span><tf-icon name="briefcase" />{{ company.sector }}</span>
+            </div>
+            <p>{{ company.description }}</p>
+            <div class="result-footer">
+              <span class="vacancy-count">
+                @if (vacancies.count(company) !== null) {
+                  <tf-icon name="layers" />{{ vacancies.count(company) }}
+                  {{
+                    vacancies.count(company) === 1 ? 'vacante registrada' : 'vacantes registradas'
+                  }}
+                } @else {
+                  Información corporativa
+                }</span
+              ><a [routerLink]="['/empresas', company.slug]"
+                >Conocer empresa <tf-icon name="arrow"
+              /></a>
+            </div>
+          </article>
+        } @empty {
+          <section class="company-empty">
+            <tf-icon name="search" />
+            <h2>No encontramos empresas para esta consulta.</h2>
+            <p>Prueba otro nombre o cambia el sector.</p>
+            <button class="btn secondary" (click)="reset()">Limpiar filtros</button>
+          </section>
+        }
+      </div>
+      <section class="career-callout">
+        <div>
+          <span>EL POTENCIAL EMPIEZA CONTIGO</span>
+          <h2>Un buen perfil abre nuevas conversaciones.</h2>
+          <p>Reúne tus competencias y descubre cómo se conectan con cada oportunidad.</p>
+        </div>
+        <a routerLink="/app/perfil" class="btn primary"
+          >Completar mi perfil <tf-icon name="arrow"
+        /></a>
+      </section>
+      <p class="directory-source-note">
+        Información corporativa de los sitios oficiales. Consulta las vacantes publicadas en
+        TalentFlow360 desde tu cuenta.
+      </p>
+    </div>
+  </section>
+</main>
+<tf-footer />

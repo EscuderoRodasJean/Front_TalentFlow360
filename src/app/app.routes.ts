@@ -3,6 +3,16 @@ import { MANAGERS, STAFF, RECRUITERS } from './core/auth/auth-store';
 import { authGuard, roleGuard } from './core/auth/auth-guards';
 export const routes: Routes = [
   {
+    path: 'empresas',
+    loadComponent: () => import('./features/companies/companies-page').then((m) => m.CompaniesPage),
+    title: 'Empresas · TalentFlow360',
+  },
+  {
+    path: 'empresas/:slug',
+    loadComponent: () => import('./features/companies/company-detail').then((m) => m.CompanyDetail),
+    title: 'Conoce la empresa · TalentFlow360',
+  },
+  {
     path: '',
     loadComponent: () => import('./features/welcome/welcome').then((m) => m.Welcome),
     title: 'TalentFlow360 · Tu siguiente paso',
