@@ -1,1 +1,123 @@
-<a routerLink="/app/postulaciones" class="back">← Volver a postulaciones</a><tf-async-state [loading]="loading()" [error]="error()" (retry)="load()"/>@if(data();as a){<header class="page-head"><div><p class="eyebrow">PROCESO #{{a.id}}</p><h1>{{a.vacanteTitulo}}</h1><div class="row"><strong>{{a.postulanteNombre}}</strong><tf-status [value]="a.estado"/></div></div><div class="panel"><span class="section-label">COMPATIBILIDAD</span><div class="metric">{{a.scoreCompatibilidad|number:'1.0-1'}}%</div><small class="muted">Puntaje informado por el servidor</small></div></header>@if(secondaryError()){<p class="auth-message" role="alert">Algunos detalles no se pudieron cargar: {{secondaryError()}} <button class="btn quiet" (click)="load()">Reintentar</button></p>}<div class="grid-2"><section class="panel"><h2>Por qué este matching</h2><p>Desglose por requisito profesional. Cada puntaje tiene una justificación.</p>@for(m of matching();track m.id){<article style="padding:20px 0;border-top:1px solid #e0e7dc"><div class="row between"><strong>{{m.requisitoNombre}}</strong><span>{{m.puntajeObtenido}} / {{m.puntajeMaximo}}</span></div><div class="score" style="margin-top:14px"><span [style.width.%]="m.puntajeMaximo?(m.puntajeObtenido||0)*100/m.puntajeMaximo!:0"></span></div><p style="font-size:.85rem;margin:12px 0 0">{{m.justificacion}}</p></article>}@empty{<p>No hay desglose disponible.</p>}</section><section class="panel"><h2>La historia de tu proceso</h2><ul class="timeline">@for(h of history();track h.id){<li><tf-status [value]="h.estadoNuevo"/><p>{{h.motivo}}</p><small>{{h.fechaCambio|date:'dd/MM/yyyy HH:mm'}} · {{h.usuarioCambioNombre}}</small></li>}@empty{<li>No hay eventos disponibles.</li>}</ul></section></div><div class="grid-2 spaced"><section class="panel"><h2>Retroalimentación</h2><p>{{auth.role()==='POSTULANTE'?'Aquí aparece la retroalimentación habilitada para ti.':'Comentarios del equipo con visibilidad controlada.'}}</p>@for(r of feedback();track r.id){<article style="padding:15px 0;border-top:1px solid #dce3da"><div class="row between"><strong>{{r.evaluadorNombre}}</strong><span class="badge">{{r.visiblePostulante?'Visible al postulante':'Interno'}}</span></div><p>{{r.contenido}}</p><small>{{r.fechaCreacion|date:'dd/MM/yyyy HH:mm'}}</small></article>}@empty{<p>Aún no hay retroalimentación disponible.</p>}</section>@if(auth.has(staff)){<section class="panel"><h2>Gestionar el proceso</h2><div class="row"><a class="btn secondary" routerLink="/app/entrevistas" [queryParams]="{postulacion:a.id}">Ver agenda</a><a class="btn secondary" routerLink="/app/evaluaciones" [queryParams]="{postulacion:a.id}">Evaluaciones y feedback</a></div><hr>@if(hasTransitions()){<h3>Registrar cambio de estado</h3>@if(actionError()){<p class="auth-message" role="alert">{{actionError()}}</p>}<tf-data-form [fields]="fields()" [busy]="busy()" label="Confirmar cambio" (submitted)="change($event)"/>}@else{<p>Este proceso está finalizado. Su historial se conserva.</p>}</section>}</div>}
+<a routerLink="/app/postulaciones" class="back">← Volver a postulaciones</a
+><tf-async-state [loading]="loading()" [error]="error()" (retry)="load()" />
+@if (data(); as a) {
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">PROCESO #{{ a.id }}</p>
+      <h1>{{ a.vacanteTitulo }}</h1>
+      <div class="row">
+        <strong>{{ a.postulanteNombre }}</strong><tf-status [value]="a.estado" />
+      </div>
+    </div>
+    <div class="panel">
+      <span class="section-label">COMPATIBILIDAD</span>
+      <div class="metric">{{ a.scoreCompatibilidad | number: '1.0-1' }}%</div>
+      <small class="muted">Puntaje informado por el servidor</small>
+    </div>
+  </header>
+  @if (secondaryError()) {
+    <p class="auth-message" role="alert">
+      Algunos detalles no se pudieron cargar: {{ secondaryError() }}
+      <button class="btn quiet" (click)="load()">Reintentar</button>
+    </p>
+  }
+  <div class="grid-2">
+    <section class="panel">
+      <h2>Por qué este matching</h2>
+      <p>Desglose por requisito profesional. Cada puntaje tiene una justificación.</p>
+      @for (m of matching(); track m.id) {
+        <article style="padding: 20px 0; border-top: 1px solid #e0e7dc">
+          <div class="row between">
+            <strong>{{ m.requisitoNombre }}</strong><span
+              >{{ m.puntajeObtenido }} / {{ m.puntajeMaximo }}</span
+            >
+          </div>
+          <div class="score" style="margin-top: 14px">
+            <span
+              [style.width.%]="
+                m.puntajeMaximo ? ((m.puntajeObtenido || 0) * 100) / m.puntajeMaximo! : 0
+              "
+            ></span>
+          </div>
+          <p style="font-size: 0.85rem; margin: 12px 0 0">{{ m.justificacion }}</p>
+        </article>
+      } @empty {
+        <p>No hay desglose disponible.</p>
+      }
+    </section>
+    <section class="panel">
+      <h2>La historia de tu proceso</h2>
+      <ul class="timeline">
+        @for (h of history(); track h.id) {
+          <li>
+            <tf-status [value]="h.estadoNuevo" />
+            <p>{{ h.motivo }}</p>
+            <small
+              >{{ h.fechaCambio | date: 'dd/MM/yyyy HH:mm' }} · {{ h.usuarioCambioNombre }}</small
+            >
+          </li>
+        } @empty {
+          <li>No hay eventos disponibles.</li>
+        }
+      </ul>
+    </section>
+  </div>
+  <div class="grid-2 spaced">
+    <section class="panel">
+      <h2>Retroalimentación</h2>
+      <p>
+        {{
+          auth.role() === 'POSTULANTE'
+            ? 'Aquí aparece la retroalimentación habilitada para ti.'
+            : 'Comentarios del equipo con visibilidad controlada.'
+        }}
+      </p>
+      @for (r of feedback(); track r.id) {
+        <article style="padding: 15px 0; border-top: 1px solid #dce3da">
+          <div class="row between">
+            <strong>{{ r.evaluadorNombre }}</strong><span class="badge">{{
+              r.visiblePostulante ? 'Visible al postulante' : 'Interno'
+            }}</span>
+          </div>
+          <p>{{ r.contenido }}</p>
+          <small>{{ r.fechaCreacion | date: 'dd/MM/yyyy HH:mm' }}</small>
+        </article>
+      } @empty {
+        <p>Aún no hay retroalimentación disponible.</p>
+      }
+    </section>
+    @if (auth.has(staff)) {
+      <section class="panel">
+        <h2>Gestionar el proceso</h2>
+        <div class="row">
+          <a
+            class="btn secondary"
+            routerLink="/app/entrevistas"
+            [queryParams]="{ postulacion: a.id }"
+            >Ver agenda</a
+          ><a
+            class="btn secondary"
+            routerLink="/app/evaluaciones"
+            [queryParams]="{ postulacion: a.id }"
+            >Evaluaciones y feedback</a
+          >
+        </div>
+        <hr />
+        @if (hasTransitions()) {
+          <h3>Registrar cambio de estado</h3>
+          @if (actionError()) {
+            <p class="auth-message" role="alert">{{ actionError() }}</p>
+          }
+          <tf-data-form
+            [fields]="fields()"
+            [busy]="busy()"
+            label="Confirmar cambio"
+            (submitted)="change($event)"
+          />
+        } @else {
+          <p>Este proceso está finalizado. Su historial se conserva.</p>
+        }
+      </section>
+    }
+  </div>
+}

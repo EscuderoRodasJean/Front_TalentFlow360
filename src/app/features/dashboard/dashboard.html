@@ -1,1 +1,112 @@
-<header class="page-head"><div><p class="eyebrow">DEL PROCESO A LA EVIDENCIA</p><h1>Una mirada que ayuda a avanzar.</h1><p>Indicadores calculados por Spring Boot a partir de los registros persistidos.</p></div><button class="btn secondary" (click)="load()" [disabled]="loading()">Actualizar datos</button></header><tf-async-state [loading]="loading()" [error]="error()" (retry)="load()"/>@if(data();as d){<div class="summary-strip"><span><strong>{{d.totalPostulantes|number}}</strong> postulantes</span><span><strong>{{d.totalVacantes|number}}</strong> vacantes</span><span><strong>{{d.totalPostulaciones|number}}</strong> postulaciones</span><small>Consultado {{loadedAt()}}</small></div><div class="metrics">@for(m of metrics();track m.code){<article class="metric-card"><span class="section-label">{{m.code}}</span><h2>{{m.label}}</h2><div class="metric">{{m.value!==undefined?(m.value|number:'1.0-1'):'—'}}<small>{{m.unit}}</small></div><p>{{m.base}}</p><span class="badge" [class.positive]="m.met">{{m.target}}</span></article>}</div><div class="grid-2 spaced"><section class="panel"><h2>El recorrido de las postulaciones</h2><p>Distribución actual por estado.</p>@for(s of d.distribucionEstadoPostulaciones|keyvalue;track s.key){<div class="stage"><div class="row between"><tf-status [value]="s.key"/><strong>{{s.value|number}}</strong></div><div class="score"><span [style.width.%]="s.value*100/maxStage()"></span></div></div>}@empty{<p>Aún no hay postulaciones registradas.</p>}</section><section class="panel"><h2>Carga de evaluaciones</h2><p>Evaluaciones registradas por evaluador.</p>@for(e of d.cargaPorEvaluador|keyvalue;track e.key){<div class="workload row between"><span>Evaluador #{{e.key}}</span><strong>{{e.value|number}} evaluaciones</strong></div>}@empty{<p>No hay evaluaciones registradas.</p>}<hr><h3>Tiempo reportado por la API</h3><div class="metric">{{d.tiempoPromedioRespuestaDias|number:'1.0-1'}} <small>días</small></div><p class="help">La versión actual del backend mide desde la postulación hasta el último cambio de estado. I2.1 exige el primer cambio. Se debe corregir el cálculo con el historial antes de usarlo como evidencia de ese indicador.</p></section></div><section class="panel spaced"><h2>Trazabilidad de la matriz</h2><div class="table-wrap"><table><thead><tr><th>Indicador</th><th>Fuente necesaria</th><th>Disponibilidad en la API actual</th></tr></thead><tbody><tr><td>I3.2 / I3.3 · Matching reproducible</td><td>Detalle matching y justificación por requisito</td><td>Disponible por postulación, sin agregado global</td></tr><tr><td>I5.1 · Solapamientos activos</td><td>Agenda y participantes</td><td>Validación de agenda, sin indicador agregado</td></tr><tr><td>I5.2 · Intentos bloqueados</td><td>Evento persistido de conflicto</td><td>Pendiente de implementar en backend</td></tr><tr><td>I6.1 · Historial completo</td><td>Usuario, motivo y fecha por cambio</td><td>Historial por postulación, sin agregado global</td></tr><tr><td>I6.2 · Transiciones rechazadas</td><td>Evento persistido de rechazo</td><td>Pendiente de implementar en backend</td></tr></tbody></table></div></section>}
+<header class="page-head">
+  <div>
+    <p class="eyebrow">DEL PROCESO A LA EVIDENCIA</p>
+    <h1>Una mirada que ayuda a avanzar.</h1>
+    <p>Indicadores calculados por Spring Boot a partir de los registros persistidos.</p>
+  </div>
+  <button class="btn secondary" (click)="load()" [disabled]="loading()">Actualizar datos</button>
+</header>
+<tf-async-state [loading]="loading()" [error]="error()" (retry)="load()" />
+@if (data(); as d) {
+  <div class="summary-strip">
+    <span
+      ><strong>{{ d.totalPostulantes | number }}</strong> postulantes</span
+    ><span
+      ><strong>{{ d.totalVacantes | number }}</strong> vacantes</span
+    ><span
+      ><strong>{{ d.totalPostulaciones | number }}</strong> postulaciones</span
+    ><small>Consultado {{ loadedAt() }}</small>
+  </div>
+  <div class="metrics">
+    @for (m of metrics(); track m.code) {
+      <article class="metric-card">
+        <span class="section-label">{{ m.code }}</span>
+        <h2>{{ m.label }}</h2>
+        <div class="metric">
+          {{ m.value !== undefined ? (m.value | number: '1.0-1') : '—' }}<small>{{ m.unit }}</small>
+        </div>
+        <p>{{ m.base }}</p>
+        <span class="badge" [class.positive]="m.met">{{ m.target }}</span>
+      </article>
+    }
+  </div>
+  <div class="grid-2 spaced">
+    <section class="panel">
+      <h2>El recorrido de las postulaciones</h2>
+      <p>Distribución actual por estado.</p>
+      @for (s of d.distribucionEstadoPostulaciones | keyvalue; track s.key) {
+        <div class="stage">
+          <div class="row between">
+            <tf-status [value]="s.key" /><strong>{{ s.value | number }}</strong>
+          </div>
+          <div class="score"><span [style.width.%]="(s.value * 100) / maxStage()"></span></div>
+        </div>
+      } @empty {
+        <p>Aún no hay postulaciones registradas.</p>
+      }
+    </section>
+    <section class="panel">
+      <h2>Carga de evaluaciones</h2>
+      <p>Evaluaciones registradas por evaluador.</p>
+      @for (e of d.cargaPorEvaluador | keyvalue; track e.key) {
+        <div class="workload row between">
+          <span>Evaluador #{{ e.key }}</span
+          ><strong>{{ e.value | number }} evaluaciones</strong>
+        </div>
+      } @empty {
+        <p>No hay evaluaciones registradas.</p>
+      }
+      <hr />
+      <h3>Tiempo reportado por la API</h3>
+      <div class="metric">
+        {{ d.tiempoPromedioRespuestaDias | number: '1.0-1' }} <small>días</small>
+      </div>
+      <p class="help">
+        La versión actual del backend mide desde la postulación hasta el último cambio de estado.
+        I2.1 exige el primer cambio. Se debe corregir el cálculo con el historial antes de usarlo
+        como evidencia de ese indicador.
+      </p>
+    </section>
+  </div>
+  <section class="panel spaced">
+    <h2>Trazabilidad de la matriz</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Indicador</th>
+            <th>Fuente necesaria</th>
+            <th>Disponibilidad en la API actual</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>I3.2 / I3.3 · Matching reproducible</td>
+            <td>Detalle matching y justificación por requisito</td>
+            <td>Disponible por postulación, sin agregado global</td>
+          </tr>
+          <tr>
+            <td>I5.1 · Solapamientos activos</td>
+            <td>Agenda y participantes</td>
+            <td>Validación de agenda, sin indicador agregado</td>
+          </tr>
+          <tr>
+            <td>I5.2 · Intentos bloqueados</td>
+            <td>Evento persistido de conflicto</td>
+            <td>Pendiente de implementar en backend</td>
+          </tr>
+          <tr>
+            <td>I6.1 · Historial completo</td>
+            <td>Usuario, motivo y fecha por cambio</td>
+            <td>Historial por postulación, sin agregado global</td>
+          </tr>
+          <tr>
+            <td>I6.2 · Transiciones rechazadas</td>
+            <td>Evento persistido de rechazo</td>
+            <td>Pendiente de implementar en backend</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+}

@@ -1,4 +1,93 @@
-<nav class="landing-nav"><a class="brand" routerLink="/"><span class="brand-mark">↗</span>talentflow<span class="muted">360</span></a><div class="row"><a href="#como-funciona" class="nav-detail">Cómo funciona</a><a routerLink="/ingresar" class="btn quiet">Ingresar</a><a routerLink="/registro" class="btn primary">Crear mi perfil <tf-icon name="arrow"/></a></div></nav>
-<main><section class="hero"><div class="hero-copy"><p class="eyebrow">EL COMIENZO DE ALGO GRANDE</p><h1>Tu talento merece<br>un buen <em>comienzo.</em></h1><p class="intro">Encuentra prácticas que conectan con lo que sabes.<br>Y sigue cada paso de tu proceso, sin quedarte con dudas.</p><div class="row"><a routerLink="/registro" class="btn primary">Encuentra tu oportunidad <tf-icon name="arrow"/></a><a routerLink="/ingresar" class="btn secondary">Soy parte del equipo</a></div><div class="trust"><span class="tiny-avatar">TF</span><span>Competencias visibles.<br><strong>Decisiones que se pueden explicar.</strong></span></div></div>
-<div class="hero-art" aria-label="Ilustración del flujo de postulación"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><span class="float-star">✦</span><article class="opportunity"><div class="row between"><span class="company-icon">↗</span><span class="badge positive">Tu próximo paso</span></div><h3>Practicante de<br>Desarrollo Web</h3><p>Tecnología · Híbrido</p><div class="skills"><span>Angular</span><span>Spring Boot</span><span>SQL</span></div><hr><div class="row between"><span>Matching explicable</span><tf-icon name="spark"/></div><p class="art-caption">Tus competencias frente a cada requisito.</p><div class="match-lines"><i></i><i></i><i></i></div></article><div class="floating-note"><span class="check-dot">✓</span><div><strong>Siempre sabes dónde estás</strong><small>Postulación · Entrevista · Feedback</small></div></div><div class="floating-tag"><tf-icon name="shield"/>Tu perfil, bajo tu control</div></div></section>
-<section id="como-funciona" class="how"><div><p class="eyebrow">UN CAMINO CON MÁS CLARIDAD</p><h2>De tu perfil a tu siguiente paso.</h2></div><div class="steps">@for(step of [{n:'01',title:'Muestra lo que sabes',body:'Completa tu perfil con educación, experiencia y competencias.'},{n:'02',title:'Conecta con una vacante',body:'Revisa requisitos profesionales y conoce tu compatibilidad.'},{n:'03',title:'Sigue tu proceso',body:'Consulta estados, fechas y la retroalimentación habilitada para ti.'}];track step.n){<article><span>{{step.n}}</span><h3>{{step.title}}</h3><p>{{step.body}}</p></article>}</div></section></main><footer>TalentFlow360 <span>Un espacio para conectar potencial y oportunidades.</span></footer>
+<nav class="landing-nav">
+  <a class="brand" routerLink="/"
+    ><span class="brand-mark">↗</span>talentflow<span class="muted">360</span></a
+  >
+  <div class="row">
+    <a href="#como-funciona" class="nav-detail">Cómo funciona</a
+    ><a routerLink="/ingresar" class="btn quiet">Ingresar</a
+    ><a routerLink="/registro" class="btn primary">Crear mi perfil <tf-icon name="arrow" /></a>
+  </div>
+</nav>
+<main>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">EL COMIENZO DE ALGO GRANDE</p>
+      <h1>Tu talento merece<br />un buen <em>comienzo.</em></h1>
+      <p class="intro">
+        Encuentra prácticas que conectan con lo que sabes.<br />Y sigue cada paso de tu proceso, sin
+        quedarte con dudas.
+      </p>
+      <div class="row">
+        <a routerLink="/registro" class="btn primary"
+          >Encuentra tu oportunidad <tf-icon name="arrow" /></a
+        ><a routerLink="/ingresar" class="btn secondary">Soy parte del equipo</a>
+      </div>
+      <div class="trust">
+        <span class="tiny-avatar">TF</span
+        ><span
+          >Competencias visibles.<br /><strong>Decisiones que se pueden explicar.</strong></span
+        >
+      </div>
+    </div>
+    <div class="hero-art" aria-label="Ilustración del flujo de postulación">
+      <div class="orbit orbit-one"></div>
+      <div class="orbit orbit-two"></div>
+      <span class="float-star">✦</span>
+      <article class="opportunity">
+        <div class="row between">
+          <span class="company-icon">↗</span><span class="badge positive">Tu próximo paso</span>
+        </div>
+        <h3>Practicante de<br />Desarrollo Web</h3>
+        <p>Tecnología · Híbrido</p>
+        <div class="skills"><span>Angular</span><span>Spring Boot</span><span>SQL</span></div>
+        <hr />
+        <div class="row between"><span>Matching explicable</span><tf-icon name="spark" /></div>
+        <p class="art-caption">Tus competencias frente a cada requisito.</p>
+        <div class="match-lines"><i></i><i></i><i></i></div>
+      </article>
+      <div class="floating-note">
+        <span class="check-dot">✓</span>
+        <div>
+          <strong>Siempre sabes dónde estás</strong
+          ><small>Postulación · Entrevista · Feedback</small>
+        </div>
+      </div>
+      <div class="floating-tag"><tf-icon name="shield" />Tu perfil, bajo tu control</div>
+    </div>
+  </section>
+  <section id="como-funciona" class="how">
+    <div>
+      <p class="eyebrow">UN CAMINO CON MÁS CLARIDAD</p>
+      <h2>De tu perfil a tu siguiente paso.</h2>
+    </div>
+    <div class="steps">
+      @for (
+        step of [
+          {
+            n: '01',
+            title: 'Muestra lo que sabes',
+            body: 'Completa tu perfil con educación, experiencia y competencias.',
+          },
+          {
+            n: '02',
+            title: 'Conecta con una vacante',
+            body: 'Revisa requisitos profesionales y conoce tu compatibilidad.',
+          },
+          {
+            n: '03',
+            title: 'Sigue tu proceso',
+            body: 'Consulta estados, fechas y la retroalimentación habilitada para ti.',
+          },
+        ];
+        track step.n
+      ) {
+        <article>
+          <span>{{ step.n }}</span>
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.body }}</p>
+        </article>
+      }
+    </div>
+  </section>
+</main>
+<footer>TalentFlow360 <span>Un espacio para conectar potencial y oportunidades.</span></footer>

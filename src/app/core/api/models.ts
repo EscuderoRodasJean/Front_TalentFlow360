@@ -1,11 +1,39 @@
-export type EstadoEntrevista = 'PROGRAMADA' | 'CONFIRMADA' | 'EN_CURSO' | 'COMPLETADA' | 'CANCELADA' | 'NO_ASISTIO';
-export type EstadoPostulacion = 'PENDIENTE_REVISION' | 'EN_REVISION' | 'PRESELECCIONADO' | 'ENTREVISTA_PROGRAMADA' | 'ENTREVISTA_REALIZADA' | 'EVALUADO' | 'ACEPTADO' | 'RECHAZADO' | 'CANCELADO';
+export type EstadoEntrevista =
+  'PROGRAMADA' | 'CONFIRMADA' | 'EN_CURSO' | 'COMPLETADA' | 'CANCELADA' | 'NO_ASISTIO';
+export type EstadoPostulacion =
+  | 'PENDIENTE_REVISION'
+  | 'EN_REVISION'
+  | 'PRESELECCIONADO'
+  | 'ENTREVISTA_PROGRAMADA'
+  | 'ENTREVISTA_REALIZADA'
+  | 'EVALUADO'
+  | 'ACEPTADO'
+  | 'RECHAZADO'
+  | 'CANCELADO';
 export type EstadoVacante = 'BORRADOR' | 'PUBLICADA' | 'EN_PROCESO' | 'CERRADA' | 'CANCELADA';
 export type Modalidad = 'PRESENCIAL' | 'REMOTO' | 'HIBRIDO';
-export type NivelEducacion = 'SECUNDARIA' | 'TECNICO' | 'UNIVERSITARIO_EN_CURSO' | 'BACHILLER' | 'TITULADO' | 'MAESTRIA' | 'DOCTORADO';
+export type NivelEducacion =
+  | 'SECUNDARIA'
+  | 'TECNICO'
+  | 'UNIVERSITARIO_EN_CURSO'
+  | 'BACHILLER'
+  | 'TITULADO'
+  | 'MAESTRIA'
+  | 'DOCTORADO';
 export type Rol = 'POSTULANTE' | 'RECLUTADOR' | 'EVALUADOR' | 'COORDINADOR' | 'ADMINISTRADOR';
-export type TipoRequisito = 'EDUCACION' | 'EXPERIENCIA' | 'HABILIDAD_TECNICA' | 'HABILIDAD_BLANDA' | 'CERTIFICACION' | 'IDIOMA';
-export interface ApiResponse<T> { success: boolean; message: string; data: T; timestamp: string; }
+export type TipoRequisito =
+  | 'EDUCACION'
+  | 'EXPERIENCIA'
+  | 'HABILIDAD_TECNICA'
+  | 'HABILIDAD_BLANDA'
+  | 'CERTIFICACION'
+  | 'IDIOMA';
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+  timestamp: string;
+}
 export interface AuthResponseDTO {
   token?: string;
   email?: string;

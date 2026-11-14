@@ -1,4 +1,85 @@
-<header class="page-head"><div><p class="eyebrow">OPORTUNIDADES CON PROPÓSITO</p><h1>Hay un lugar para tu talento.</h1><p>Explora vacantes y descubre las competencias que buscan los equipos.</p></div>@if(auth.has(recruiters)){<a class="btn primary" routerLink="/app/vacantes/nueva"><tf-icon name="plus"/>Crear vacante</a>}</header>
-<section class="filters"><div class="field search"><label for="job-search">Puesto, empresa o lugar</label><input id="job-search" placeholder="¿Cuál será tu siguiente paso?" [ngModel]="query()" (ngModelChange)="query.set($event);reset()"/></div><div class="field"><label for="mode">Modalidad</label><select id="mode" [ngModel]="mode()" (ngModelChange)="mode.set($event);reset()"><option value="">Todas las modalidades</option><option>HIBRIDO</option><option>REMOTO</option><option>PRESENCIAL</option></select></div>@if(auth.has(recruiters)){<div class="field"><label for="state">Estado</label><select id="state" [ngModel]="state()" (ngModelChange)="state.set($event);reset()"><option value="">Todos los estados</option>@for(s of ['BORRADOR','PUBLICADA','EN_PROCESO','CERRADA','CANCELADA'];track s){<option>{{s}}</option>}</select></div>}</section>
-<tf-async-state [loading]="loading()" [error]="error()" (retry)="load()"/>
-@if(!loading()&&!error()){<div class="row between results"><span>{{filtered().length}} oportunidades encontradas</span><span>Requisitos profesionales y explícitos</span></div><div class="jobs-grid">@for(job of visible();track job.id){<a class="job-card" [routerLink]="['/app/vacantes',job.id]"><div class="row between"><span class="company-avatar">{{job.empresa?.slice(0,2)?.toUpperCase()}}</span><tf-status [value]="job.estado"/></div><p class="company">{{job.empresa}}</p><h2>{{job.titulo}}</h2><div class="job-meta"><span><tf-icon name="pin"/>{{job.ubicacion||'Por definir'}}</span><span>{{job.modalidad?.replaceAll('_',' ')}}</span></div><div class="tags">@for(req of job.requisitos?.slice(0,3);track req.id){<span>{{req.nombre}}</span>}</div><div class="card-bottom"><span>{{job.numVacantes}} {{job.numVacantes===1?'posición':'posiciones'}}</span><strong>Ver oportunidad <tf-icon name="arrow"/></strong></div></a>}@empty{<div class="empty full">No hay vacantes que coincidan. Prueba con otros filtros.</div>}</div><div class="pagination"><span>Página {{page()}} de {{pages()}}</span><div class="row"><button class="btn secondary" [disabled]="page()===1" (click)="page.set(page()-1)">Anterior</button><button class="btn secondary" [disabled]="page()>=pages()" (click)="page.set(page()+1)">Siguiente</button></div></div>}
+<header class="page-head">
+  <div>
+    <p class="eyebrow">OPORTUNIDADES CON PROPÓSITO</p>
+    <h1>Hay un lugar para tu talento.</h1>
+    <p>Explora vacantes y descubre las competencias que buscan los equipos.</p>
+  </div>
+  @if (auth.has(recruiters)) {
+    <a class="btn primary" routerLink="/app/vacantes/nueva"><tf-icon name="plus" />Crear vacante</a>
+  }
+</header>
+<section class="filters">
+  <div class="field search">
+    <label for="job-search">Puesto, empresa o lugar</label
+    ><input
+      id="job-search"
+      placeholder="¿Cuál será tu siguiente paso?"
+      [ngModel]="query()"
+      (ngModelChange)="query.set($event); reset()"
+    />
+  </div>
+  <div class="field">
+    <label for="mode">Modalidad</label
+    ><select id="mode" [ngModel]="mode()" (ngModelChange)="mode.set($event); reset()">
+      <option value="">Todas las modalidades</option>
+      <option>HIBRIDO</option>
+      <option>REMOTO</option>
+      <option>PRESENCIAL</option>
+    </select>
+  </div>
+  @if (auth.has(recruiters)) {
+    <div class="field">
+      <label for="state">Estado</label
+      ><select id="state" [ngModel]="state()" (ngModelChange)="state.set($event); reset()">
+        <option value="">Todos los estados</option>
+        @for (s of ['BORRADOR', 'PUBLICADA', 'EN_PROCESO', 'CERRADA', 'CANCELADA']; track s) {
+          <option>{{ s }}</option>
+        }
+      </select>
+    </div>
+  }
+</section>
+<tf-async-state [loading]="loading()" [error]="error()" (retry)="load()" />
+@if (!loading() && !error()) {
+  <div class="row between results">
+    <span>{{ filtered().length }} oportunidades encontradas</span
+    ><span>Requisitos profesionales y explícitos</span>
+  </div>
+  <div class="jobs-grid">
+    @for (job of visible(); track job.id) {
+      <a class="job-card" [routerLink]="['/app/vacantes', job.id]"
+        ><div class="row between">
+          <span class="company-avatar">{{
+            job.empresa?.slice(0, 2)?.toUpperCase()
+          }}</span><tf-status [value]="job.estado" />
+        </div>
+        <p class="company">{{ job.empresa }}</p>
+        <h2>{{ job.titulo }}</h2>
+        <div class="job-meta">
+          <span><tf-icon name="pin" />{{ job.ubicacion || 'Por definir' }}</span
+          ><span>{{ job.modalidad?.replaceAll('_', ' ') }}</span>
+        </div>
+        <div class="tags">
+          @for (req of job.requisitos?.slice(0, 3); track req.id) {
+            <span>{{ req.nombre }}</span>
+          }
+        </div>
+        <div class="card-bottom">
+          <span>{{ job.numVacantes }} {{ job.numVacantes === 1 ? 'posición' : 'posiciones' }}</span
+          ><strong>Ver oportunidad <tf-icon name="arrow" /></strong></div
+      ></a>
+    } @empty {
+      <div class="empty full">No hay vacantes que coincidan. Prueba con otros filtros.</div>
+    }
+  </div>
+  <div class="pagination">
+    <span>Página {{ page() }} de {{ pages() }}</span>
+    <div class="row">
+      <button class="btn secondary" [disabled]="page() === 1" (click)="page.set(page() - 1)">
+        Anterior</button
+      ><button class="btn secondary" [disabled]="page() >= pages()" (click)="page.set(page() + 1)">
+        Siguiente
+      </button>
+    </div>
+  </div>
+}

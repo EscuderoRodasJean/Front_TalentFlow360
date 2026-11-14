@@ -1,1 +1,84 @@
-.auth-layout{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}.story{background:#143f39;color:white;padding:45px 60px;display:flex;flex-direction:column;justify-content:space-between}.story .brand-mark{background:#d6ed83;color:#143f39}.story h1{font-size:4.4rem;letter-spacing:-.06em}.story h1 em{font-family:Georgia,serif;color:#d6ed83;font-weight:400}.story p{color:#b0c7b9}.story .eyebrow{color:#c1d796}.story small{color:#9eb7a5}.auth-panel{max-width:580px;width:100%;margin:auto;padding:55px}.auth-panel h2{font-size:2.2rem}.bottom{font-size:.85rem;margin-top:25px}.bottom a{color:#23563b;font-weight:700}:host ::ng-deep .data-form{grid-template-columns:1fr}:host ::ng-deep .data-form .btn{width:100%}@media(max-width:850px){.story{padding:30px}.story h1{font-size:3rem}.auth-panel{padding:30px}}@media(max-width:650px){.auth-layout{grid-template-columns:1fr}.story{padding:22px}.story>div,.story>small{display:none}.auth-panel{padding:35px 24px}}
+.auth-layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.story {
+  background: #143f39;
+  color: white;
+  padding: 45px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.story .brand-mark {
+  background: #d6ed83;
+  color: #143f39;
+}
+.story h1 {
+  font-size: 4.4rem;
+  letter-spacing: -0.06em;
+}
+.story h1 em {
+  font-family: Georgia, serif;
+  color: #d6ed83;
+  font-weight: 400;
+}
+.story p {
+  color: #b0c7b9;
+}
+.story .eyebrow {
+  color: #c1d796;
+}
+.story small {
+  color: #9eb7a5;
+}
+.auth-panel {
+  max-width: 580px;
+  width: 100%;
+  margin: auto;
+  padding: 55px;
+}
+.auth-panel h2 {
+  font-size: 2.2rem;
+}
+.bottom {
+  font-size: 0.85rem;
+  margin-top: 25px;
+}
+.bottom a {
+  color: #23563b;
+  font-weight: 700;
+}
+:host ::ng-deep .data-form {
+  grid-template-columns: 1fr;
+}
+:host ::ng-deep .data-form .btn {
+  width: 100%;
+}
+@media (max-width: 850px) {
+  .story {
+    padding: 30px;
+  }
+  .story h1 {
+    font-size: 3rem;
+  }
+  .auth-panel {
+    padding: 30px;
+  }
+}
+@media (max-width: 650px) {
+  .auth-layout {
+    grid-template-columns: 1fr;
+  }
+  .story {
+    padding: 22px;
+  }
+  .story > div,
+  .story > small {
+    display: none;
+  }
+  .auth-panel {
+    padding: 35px 24px;
+  }
+}

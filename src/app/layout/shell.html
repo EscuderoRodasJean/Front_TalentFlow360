@@ -1,10 +1,49 @@
 <a href="#content" class="skip">Ir al contenido</a>
 <aside class="sidebar" [class.open]="open()">
- <a class="brand" routerLink="/app/inicio"><span class="brand-mark">↗</span>talentflow<span class="version">360</span></a>
- <span class="workspace">ESPACIO DE {{auth.role()==='POSTULANTE'?'TALENTO':'SELECCIÓN'}}</span>
- <nav aria-label="Navegación principal">@for(link of links;track link.path){@if(!link.roles || auth.has(link.roles)){<a [routerLink]="'/app/'+link.path" routerLinkActive="active" (click)="open.set(false)"><tf-icon [name]="link.icon"/>{{link.label}}</a>}}</nav>
- <div class="side-note"><span>Un proceso más claro.</span><p>Cada oportunidad, cada decisión y cada siguiente paso.</p><tf-icon name="spark"/></div>
- <button class="logout" (click)="logout()"><tf-icon name="logout"/>Cerrar sesión</button>
+  <a class="brand" routerLink="/app/inicio"
+    ><span class="brand-mark">↗</span>talentflow<span class="version">360</span></a
+  >
+  <span class="workspace"
+    >ESPACIO DE {{ auth.role() === 'POSTULANTE' ? 'TALENTO' : 'SELECCIÓN' }}</span
+  >
+  <nav aria-label="Navegación principal">
+    @for (link of links; track link.path) {
+      @if (!link.roles || auth.has(link.roles)) {
+        <a [routerLink]="'/app/' + link.path" routerLinkActive="active" (click)="open.set(false)"
+          ><tf-icon [name]="link.icon" />{{ link.label }}</a
+        >
+      }
+    }
+  </nav>
+  <div class="side-note">
+    <span>Un proceso más claro.</span>
+    <p>Cada oportunidad, cada decisión y cada siguiente paso.</p>
+    <tf-icon name="spark" />
+  </div>
+  <button class="logout" (click)="logout()"><tf-icon name="logout" />Cerrar sesión</button>
 </aside>
-@if(open()){<button class="scrim" aria-label="Cerrar menú" (click)="open.set(false)"></button>}
-<div class="workspace-body"><header class="topbar"><div class="row"><button class="mobile-menu btn quiet" aria-label="Abrir menú" [attr.aria-expanded]="open()" (click)="open.set(!open())"><tf-icon name="menu"/></button><span class="top-crumb">Tu siguiente paso empieza aquí</span></div><div class="identity"><span class="avatar">{{auth.name().slice(0,1)}}</span><span><strong>{{auth.name()}}</strong><small>{{label(auth.role())}}</small></span></div></header><main id="content"><router-outlet/></main><footer>TalentFlow360 <span>Prácticas con propósito. Procesos con transparencia.</span></footer></div>
+@if (open()) {
+  <button class="scrim" aria-label="Cerrar menú" (click)="open.set(false)"></button>
+}
+<div class="workspace-body">
+  <header class="topbar">
+    <div class="row">
+      <button
+        class="mobile-menu btn quiet"
+        aria-label="Abrir menú"
+        [attr.aria-expanded]="open()"
+        (click)="open.set(!open())"
+      >
+        <tf-icon name="menu" /></button
+      ><span class="top-crumb">Tu siguiente paso empieza aquí</span>
+    </div>
+    <div class="identity">
+      <span class="avatar">{{ auth.name().slice(0, 1) }}</span><span
+        ><strong>{{ auth.name() }}</strong
+        ><small>{{ label(auth.role()) }}</small></span
+      >
+    </div>
+  </header>
+  <main id="content"><router-outlet /></main>
+  <footer>TalentFlow360 <span>Prácticas con propósito. Procesos con transparencia.</span></footer>
+</div>

@@ -9,12 +9,48 @@ import { errorMessage } from '../../core/api/http-interceptors';
 import { AsyncState } from '../../shared/ui/async-state';
 import { Icon } from '../../shared/ui/icon';
 import { Status } from '../../shared/ui/status';
-@Component({imports:[RouterLink,FormsModule,AsyncState,Icon,Status],templateUrl:'./vacancies.html',styleUrl:'./vacancies.scss'})
+@Component({
+  imports: [RouterLink, FormsModule, AsyncState, Icon, Status],
+  templateUrl: './vacancies.html',
+  styleUrl: './vacancies.scss',
+})
 export class Vacancies {
- readonly api=inject(TalentApi);readonly auth=inject(AuthStore);readonly recruiters=RECRUITERS;readonly jobs=signal<VacanteDTO[]>([]);readonly loading=signal(false);readonly error=signal('');readonly query=signal('');readonly mode=signal('');readonly state=signal('');readonly page=signal(1);
- readonly filtered=computed(()=>this.jobs().filter(v=>(this.auth.role()!=='POSTULANTE'||v.estado==='PUBLICADA')&&(!this.mode()||v.modalidad===this.mode())&&(!this.state()||v.estado===this.state())&&[v.titulo,v.empresa,v.ubicacion].join(' ').toLocaleLowerCase().includes(this.query().toLocaleLowerCase())));
- readonly visible=computed(()=>this.filtered().slice((this.page()-1)*9,this.page()*9));readonly pages=computed(()=>Math.max(1,Math.ceil(this.filtered().length/9)));
- constructor(){this.load();}
- load(){this.loading.set(true);this.error.set('');this.api.vacancies().pipe(finalize(()=>this.loading.set(false))).subscribe({next:v=>this.jobs.set(v),error:e=>this.error.set(errorMessage(e))});}
- reset(){this.page.set(1);}
+  readonly api = inject(TalentApi);
+  readonly auth = inject(AuthStore);
+  readonly recruiters = RECRUITERS;
+  readonly jobs = signal<VacanteDTO[]>([]);
+  readonly loading = signal(false);
+  readonly error = signal('');
+  readonly query = signal('');
+  readonly mode = signal('');
+  readonly state = signal('');
+  readonly page = signal(1);
+  readonly filtered = computed(() =>
+    this.jobs().filter(
+      (v) =>
+        (this.auth.role() !== 'POSTULANTE' || v.estado === 'PUBLICADA') &&
+        (!this.mode() || v.modalidad === this.mode()) &&
+        (!this.state() || v.estado === this.state()) &&
+        [v.titulo, v.empresa, v.ubicacion]
+          .join(' ')
+          .toLocaleLowerCase()
+          .includes(this.query().toLocaleLowerCase()),
+    ),
+  );
+  readonly visible = computed(() => this.filtered().slice((this.page() - 1) * 9, this.page() * 9));
+  readonly pages = computed(() => Math.max(1, Math.ceil(this.filtered().length / 9)));
+  constructor() {
+    this.load();
+  }
+  load() {
+    this.loading.set(true);
+    this.error.set('');
+    this.api
+      .vacancies()
+      .pipe(finalize(() => this.loading.set(false)))
+      .subscribe({ next: (v) => this.jobs.set(v), error: (e) => this.error.set(errorMessage(e)) });
+  }
+  reset() {
+    this.page.set(1);
+  }
 }

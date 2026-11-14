@@ -1,1 +1,83 @@
-.summary-strip{display:flex;gap:35px;flex-wrap:wrap;align-items:center;padding:19px 0 29px;color:#7a8977;font-size:.85rem}.summary-strip strong{font-size:1.2rem;color:#234b38;margin-right:5px}.summary-strip small{margin-left:auto}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:17px}.metric-card{padding:24px;background:white;border:1px solid #dce3da;border-radius:15px}.metric-card h2{font-size:.95rem;letter-spacing:-.01em;margin:12px 0 24px}.metric small{font-size:.95rem;font-weight:400;letter-spacing:0}.metric-card p{font-size:.68rem;margin:8px 0 19px}.stage{padding:13px 0}.stage .score{margin-top:10px;height:6px}.stage strong{font-size:.85rem}.workload{padding:15px 0;border-bottom:1px solid #e5eadf;font-size:.85rem}@media(max-width:1150px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.metrics{grid-template-columns:1fr 1fr;gap:10px}.metric-card{padding:16px}.metric-card .metric{font-size:1.9rem}.metric-card .badge{white-space:normal}.summary-strip{gap:18px}.summary-strip small{margin-left:0}}
+.summary-strip {
+  display: flex;
+  gap: 35px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 19px 0 29px;
+  color: #7a8977;
+  font-size: 0.85rem;
+}
+.summary-strip strong {
+  font-size: 1.2rem;
+  color: #234b38;
+  margin-right: 5px;
+}
+.summary-strip small {
+  margin-left: auto;
+}
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 17px;
+}
+.metric-card {
+  padding: 24px;
+  background: white;
+  border: 1px solid #dce3da;
+  border-radius: 15px;
+}
+.metric-card h2 {
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  margin: 12px 0 24px;
+}
+.metric small {
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.metric-card p {
+  font-size: 0.68rem;
+  margin: 8px 0 19px;
+}
+.stage {
+  padding: 13px 0;
+}
+.stage .score {
+  margin-top: 10px;
+  height: 6px;
+}
+.stage strong {
+  font-size: 0.85rem;
+}
+.workload {
+  padding: 15px 0;
+  border-bottom: 1px solid #e5eadf;
+  font-size: 0.85rem;
+}
+@media (max-width: 1150px) {
+  .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 520px) {
+  .metrics {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .metric-card {
+    padding: 16px;
+  }
+  .metric-card .metric {
+    font-size: 1.9rem;
+  }
+  .metric-card .badge {
+    white-space: normal;
+  }
+  .summary-strip {
+    gap: 18px;
+  }
+  .summary-strip small {
+    margin-left: 0;
+  }
+}
