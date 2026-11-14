@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { TalentApi } from '../../core/api/talent-api';
 import { AuthStore } from '../../core/auth/auth-store';
@@ -7,51 +8,12 @@ import { safeReturnUrl } from '../../core/auth/auth-guards';
 import { errorMessage } from '../../core/api/http-interceptors';
 import { NoticeStore } from '../../core/feedback/notice-store';
 import { DataForm, Field, FormValue } from '../../shared/forms/data-form';
+import { Brand } from '../../shared/ui/brand';
+import { Footer } from '../../shared/ui/footer';
+import { Icon } from '../../shared/ui/icon';
 @Component({
-  imports: [RouterLink, DataForm],
-  template: `<main class="auth-layout">
-    <section class="story">
-      <a routerLink="/" class="brand"><span class="brand-mark">↗</span>talentflow360</a>
-      <div>
-        <p class="eyebrow">UN PROCESO, MUCHAS POSIBILIDADES</p>
-        <h1>Lo que sabes.<br />Lo que puedes<br /><em>llegar a ser.</em></h1>
-        <p>
-          Conecta con oportunidades y conoce el camino<br />de tu postulación, de principio a fin.
-        </p>
-      </div>
-      <small>Matching profesional. Seguimiento transparente.</small>
-    </section>
-    <section class="auth-panel">
-      <a routerLink="/" class="back">← Volver al inicio</a>
-      <p class="eyebrow">{{ register ? 'CREA TU CUENTA' : 'QUÉ BUENO VERTE' }}</p>
-      <h2>{{ register ? 'Tu próximo paso empieza aquí.' : 'Entra a tu espacio.' }}</h2>
-      <p>
-        {{
-          register
-            ? 'El registro público es para postulantes.'
-            : 'Ingresa con el correo de tu cuenta TalentFlow360.'
-        }}
-      </p>
-      @if (error()) {
-        <div class="auth-message" role="alert">{{ error() }}</div>
-      }
-      <tf-data-form
-        [fields]="fields"
-        [busy]="busy()"
-        [label]="register ? 'Crear cuenta' : 'Iniciar sesión'"
-        (submitted)="submit($event)"
-      />
-      <p class="bottom">
-        {{ register ? '¿Ya tienes una cuenta?' : '¿Es tu primera vez aquí?' }}
-        <a [routerLink]="register ? '/ingresar' : '/registro'">{{
-          register ? 'Inicia sesión' : 'Crea tu perfil'
-        }}</a>
-      </p>
-      <small class="muted"
-        >Por tu seguridad, al recargar la página deberás volver a ingresar.</small
-      >
-    </section>
-  </main>`,
+  imports: [RouterLink, ReactiveFormsModule, DataForm, Brand, Footer, Icon],
+  templateUrl: './auth-page.html',
   styleUrl: './auth-page.scss',
 })
 export class AuthPage {
@@ -63,24 +25,40 @@ export class AuthPage {
   readonly register = this.route.snapshot.data['register'] === true;
   readonly busy = signal(false);
   readonly error = signal('');
+  readonly showPassword = signal(false);
+  readonly help = signal(false);
+  readonly access = signal(
+    this.route.snapshot.queryParamMap.get('acceso') === 'equipo' ? 'equipo' : 'postulante',
+  );
+  readonly loginForm = new FormGroup({
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email, Validators.maxLength(100)],
+    }),
+    password: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(72)],
+    }),
+  });
   readonly fields: Field[] = [
-    ...(this.register
-      ? [
-          { key: 'nombre', label: 'Nombre', required: true, maxLength: 80 },
-          { key: 'apellido', label: 'Apellido', required: true, maxLength: 80 },
-        ]
-      : []),
+    { key: 'nombre', label: 'Nombre', required: true, maxLength: 80 },
+    { key: 'apellido', label: 'Apellido', required: true, maxLength: 80 },
     { key: 'email', label: 'Correo electrónico', type: 'email', required: true, maxLength: 100 },
     {
       key: 'password',
       label: 'Contraseña',
       type: 'password',
       required: true,
-      minLength: this.register ? 8 : 1,
+      minLength: 8,
       maxLength: 72,
     },
   ];
+  submitLogin() {
+    this.loginForm.markAllAsTouched();
+    if (this.loginForm.valid) this.submit(this.loginForm.getRawValue());
+  }
   submit(value: FormValue) {
+    if (this.busy()) return;
     this.busy.set(true);
     this.error.set('');
     const body = { ...value, email: String(value['email']).trim(), rol: 'POSTULANTE' };

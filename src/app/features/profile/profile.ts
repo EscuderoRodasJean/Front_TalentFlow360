@@ -14,7 +14,13 @@ import {
   skillFields,
 } from '../../shared/forms/fields';
 import { AsyncState } from '../../shared/ui/async-state';
-@Component({ imports: [DataForm, AsyncState], templateUrl: './profile.html' })
+import { RouterLink } from '@angular/router';
+import { Icon } from '../../shared/ui/icon';
+@Component({
+  imports: [DataForm, AsyncState, RouterLink, Icon],
+  templateUrl: './profile.html',
+  styleUrl: './profile.scss',
+})
 export class Profile {
   private readonly api = inject(TalentApi);
   readonly auth = inject(AuthStore);

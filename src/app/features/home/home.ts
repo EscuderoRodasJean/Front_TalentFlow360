@@ -1,83 +1,96 @@
-import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, computed, inject, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { finalize } from 'rxjs';
 import { AuthStore, MANAGERS, STAFF } from '../../core/auth/auth-store';
+import { TalentApi } from '../../core/api/talent-api';
+import { PostulanteDTO, PostulacionDTO, VacanteDTO } from '../../core/api/models';
+import { errorMessage } from '../../core/api/http-interceptors';
 import { Icon } from '../../shared/ui/icon';
+import { AsyncState } from '../../shared/ui/async-state';
+import { CategoryLinks } from '../../shared/ui/category-links';
+import { OpportunitySearch, OpportunityQuery } from '../../shared/forms/opportunity-search';
 @Component({
-  imports: [RouterLink, Icon],
-  template: `<p class="eyebrow">TU ESPACIO TALENTFLOW</p>
-    <section class="welcome-banner">
-      <div>
-        <h1>Hola, {{ auth.name().split(' ')[0] }}.<br />Hagamos que el talento avance.</h1>
-        <p>
-          {{
-            auth.role() === 'POSTULANTE'
-              ? 'Tu perfil cuenta una historia. Encuentra dónde continuarla.'
-              : 'Todo lo que necesitas para acompañar el siguiente paso de cada postulante.'
-          }}
-        </p>
-        <a class="btn lime" routerLink="/app/vacantes"
-          >Explorar oportunidades <tf-icon name="arrow"
-        /></a>
-      </div>
-      <div class="banner-glyph" aria-hidden="true">↗</div>
-    </section>
-    <div class="section-head">
-      <h2>Un proceso claro, paso a paso</h2>
-      <span class="muted">¿Por dónde empezamos?</span>
-    </div>
-    <div class="home-grid">
-      @for (card of cards; track card.route) {
-        @if (!card.roles || auth.has(card.roles)) {
-          <a class="home-card" [routerLink]="'/app/' + card.route"
-            ><tf-icon [name]="card.icon" />
-            <h3>{{ card.title }}</h3>
-            <p>{{ card.body }}</p>
-            <span>Ir a mi espacio <tf-icon name="arrow" /></span
-          ></a>
-        }
-      }
-    </div>
-    <section class="principles">
-      <tf-icon name="shield" />
-      <div>
-        <h3>El potencial se evalúa con criterios profesionales.</h3>
-        <p>
-          Conoce el desglose del matching, la razón de cada cambio y la retroalimentación que se ha
-          habilitado para ti.
-        </p>
-      </div>
-    </section>`,
+  imports: [RouterLink, DatePipe, Icon, AsyncState, CategoryLinks, OpportunitySearch],
+  templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home {
   readonly auth = inject(AuthStore);
-  readonly cards = [
-    {
-      route: 'perfil',
-      title: 'Dale forma a tu perfil',
-      body: 'Educación, experiencia y habilidades para mostrar lo que sabes.',
-      icon: 'user',
-      roles: ['POSTULANTE'] as const,
-    },
-    {
-      route: 'postulaciones',
-      title: 'Cada paso, a la vista',
-      body: 'Consulta el estado, el matching explicable y el historial del proceso.',
-      icon: 'layers',
-    },
-    {
-      route: 'entrevistas',
-      title: 'Una agenda sin cruces',
-      body: 'Organiza encuentros y consulta las entrevistas de tu equipo.',
-      icon: 'calendar',
-      roles: STAFF,
-    },
-    {
-      route: 'indicadores',
-      title: 'Decisiones con contexto',
-      body: 'Completitud, seguimiento y retroalimentación desde la persistencia.',
-      icon: 'chart',
-      roles: MANAGERS,
-    },
-  ];
+  private readonly api = inject(TalentApi);
+  private readonly router = inject(Router);
+  readonly managers = MANAGERS;
+  readonly staff = STAFF;
+  readonly profile = signal<PostulanteDTO | null>(null);
+  readonly rows = signal<PostulacionDTO[] | null>(null);
+  readonly jobs = signal<VacanteDTO[]>([]);
+  readonly loading = signal(false);
+  readonly error = signal('');
+  readonly profileError = signal('');
+  readonly activityError = signal('');
+  readonly tip = signal(true);
+  readonly tab = signal<'vacantes' | 'empresas'>('vacantes');
+  readonly opportunities = computed(() =>
+    this.jobs()
+      .filter((j) => j.estado === 'PUBLICADA')
+      .slice(0, 5),
+  );
+  readonly companies = computed(() =>
+    [
+      ...new Map(
+        this.jobs()
+          .filter((j) => j.estado === 'PUBLICADA')
+          .map((j) => [j.empresa, j]),
+      ).values(),
+    ].slice(0, 6),
+  );
+  readonly active = computed(
+    () =>
+      this.rows()?.filter((a) => !['ACEPTADO', 'RECHAZADO', 'CANCELADO'].includes(a.estado ?? ''))
+        .length,
+  );
+  readonly closed = computed(
+    () =>
+      this.rows()?.filter((a) => ['ACEPTADO', 'RECHAZADO', 'CANCELADO'].includes(a.estado ?? ''))
+        .length,
+  );
+  constructor() {
+    this.load();
+    if (this.auth.role() === 'POSTULANTE') this.loadProfile();
+    else if (this.auth.role() === 'EVALUADOR') this.loadAssigned();
+  }
+  load() {
+    this.loading.set(true);
+    this.error.set('');
+    this.api
+      .vacancies()
+      .pipe(finalize(() => this.loading.set(false)))
+      .subscribe({ next: (v) => this.jobs.set(v), error: (e) => this.error.set(errorMessage(e)) });
+  }
+  loadProfile() {
+    this.profileError.set('');
+    this.api.profile(this.auth.session()!.usuarioId!).subscribe({
+      next: (p) => {
+        this.profile.set(p);
+        this.api.applications('postulante', p.id!).subscribe({
+          next: (r) => this.rows.set(r),
+          error: (e) => this.activityError.set(errorMessage(e)),
+        });
+      },
+      error: (e) => {
+        if (e.status !== 404) this.profileError.set(errorMessage(e));
+      },
+    });
+  }
+  loadAssigned() {
+    this.api.applications('evaluador', this.auth.session()!.usuarioId!).subscribe({
+      next: (r) => this.rows.set(r),
+      error: (e) => this.activityError.set(errorMessage(e)),
+    });
+  }
+  search(q: OpportunityQuery) {
+    void this.router.navigate(['/app/vacantes'], {
+      queryParams: { q: q.query, ubicacion: q.location },
+    });
+  }
 }

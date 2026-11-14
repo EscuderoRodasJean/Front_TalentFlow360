@@ -1,117 +1,200 @@
-<header class="page-head">
+<a routerLink="/app/inicio" class="back"><tf-icon name="arrow" />Volver a mi espacio</a>
+<header class="profile-page-head">
   <div>
-    <p class="eyebrow">LO QUE TE HACE ÚNICO</p>
-    <h1>Tu perfil, tu punto de partida.</h1>
-    <p>Agrega información profesional para que el matching pueda explicar tu compatibilidad.</p>
+    <span>MI PERFIL PROFESIONAL</span>
+    <h1>Todo lo que puedes aportar.</h1>
+    <p>Haz visible tu experiencia, tu formación y las habilidades que te representan.</p>
   </div>
+  <span class="profile-head-icon"><tf-icon name="resume" /></span>
 </header>
 <tf-async-state [loading]="loading()" [error]="error()" (retry)="load()" />
 @if (!loading() && !error()) {
-  <div class="grid-2">
-    <section class="panel">
-      <h2>{{ auth.name() }}</h2>
-      <p>{{ auth.session()?.email }}</p>
-      <div class="row between">
-        <span>Completitud del perfil</span
-        ><strong>{{ profile()?.porcentajeCompletitud || 0 }}%</strong>
-      </div>
-      <div class="score spaced">
-        <span [style.width.%]="profile()?.porcentajeCompletitud || 0"></span>
-      </div>
-      <p class="help spaced">
-        El servidor considera seis apartados: resumen, teléfono, dirección, educación, experiencia y
-        habilidades. Los proyectos o actividades formativas también pueden describir tu experiencia.
-      </p>
-    </section>
-    <section class="panel">
-      <h2>Tu información profesional</h2>
-      <div class="pill-tabs">
-        @for (t of ['contacto', 'educación', 'experiencia', 'habilidades']; track t) {
-          <button [class.active]="tab() === t" (click)="tab.set(t)">{{ t }}</button>
-        }
-      </div>
-      @if (actionError()) {
-        <p class="auth-message" role="alert">{{ actionError() }}</p>
-      }
-      @switch (tab()) {
-        @case ('contacto') {
-          <tf-data-form
-            [fields]="contactFields"
-            [values]="values()"
-            [busy]="busy()"
-            label="Guardar perfil"
-            (submitted)="saveContact($event)"
-          />
-        }
-        @case ('educación') {
-          @if (profile()) {
-            <tf-data-form
-              prefix="education"
-              [fields]="educationFields"
-              [busy]="busy()"
-              label="Agregar educación"
-              (submitted)="add('educaciones', $event)"
-            />
-          } @else {
-            <p>Guarda primero tus datos de contacto.</p>
-          }
-        }
-        @case ('experiencia') {
-          @if (profile()) {
-            <tf-data-form
-              prefix="experience"
-              [fields]="experienceFields"
-              [busy]="busy()"
-              label="Agregar experiencia"
-              (submitted)="add('experiencias', $event)"
-            />
-          } @else {
-            <p>Guarda primero tus datos de contacto.</p>
-          }
-        }
-        @case ('habilidades') {
-          @if (profile()) {
-            <tf-data-form
-              prefix="skills"
-              [fields]="skillFields"
-              [busy]="busy()"
-              label="Agregar habilidad"
-              (submitted)="add('habilidades', $event)"
-            />
-          } @else {
-            <p>Guarda primero tus datos de contacto.</p>
-          }
-        }
-      }
-    </section>
-  </div>
-  <div class="grid-2 spaced">
-    <section class="panel">
-      <h2>Educación y experiencia</h2>
-      @for (e of profile()?.educaciones; track e.id) {
-        <p>
-          <strong>{{ e.titulo }}</strong><br />{{ e.institucion }} ·
-          {{ e.nivelEducacion?.replaceAll('_', ' ') }}
+  <div class="profile-layout">
+    <aside class="profile-sidebar">
+      <section class="profile-identity">
+        <div class="identity-cover"></div>
+        <span class="identity-avatar">{{ auth.name().slice(0, 1) }}</span>
+        <h2>{{ auth.name() }}</h2>
+        <p>{{ auth.session()?.email }}</p>
+        <span class="badge">Postulante</span>
+        <hr />
+        <div class="row between">
+          <span>Mi perfil está completo al</span
+          ><strong>{{ profile()?.porcentajeCompletitud || 0 }}%</strong>
+        </div>
+        <div class="score">
+          <span [style.width.%]="profile()?.porcentajeCompletitud || 0"></span>
+        </div>
+        <p class="completion-message">
+          {{
+            profile()?.perfilCompleto
+              ? '¡Tu perfil ya está completo!'
+              : 'Cada apartado cuenta. Sigue completando tu información.'
+          }}
         </p>
-      }
-      @for (e of profile()?.experiencias; track e.id) {
-        <p>
-          <strong>{{ e.cargo }}</strong><br />{{ e.empresa }}
-        </p>
-      }
-      @if (!profile()?.educaciones?.length && !profile()?.experiencias?.length) {
-        <p>Aún no has registrado tu trayectoria.</p>
-      }
-    </section>
-    <section class="panel">
-      <h2>Habilidades y competencias</h2>
-      <div class="row">
-        @for (h of profile()?.habilidades; track h.id) {
-          <span class="badge positive">{{ h.nombre }} · {{ h.nivelDominio }}</span>
-        } @empty {
-          <p>Agrega las competencias que te representan.</p>
+      </section>
+      <section class="profile-checklist">
+        <h2>Un perfil con más contexto</h2>
+        @for (
+          item of [
+            { label: 'Resumen profesional', done: !!profile()?.resumenProfesional },
+            { label: 'Datos de contacto', done: !!profile()?.telefono && !!profile()?.direccion },
+            { label: 'Educación', done: !!profile()?.educaciones?.length },
+            { label: 'Experiencia y proyectos', done: !!profile()?.experiencias?.length },
+            { label: 'Habilidades', done: !!profile()?.habilidades?.length },
+          ];
+          track item.label
+        ) {
+          <div [class.complete]="item.done">
+            <span><tf-icon [name]="item.done ? 'check' : 'plus'" /></span>{{ item.label }}
+          </div>
         }
+      </section>
+      <a class="sidebar-opportunities" routerLink="/app/vacantes"
+        ><tf-icon name="briefcase" />
+        <div>
+          <strong>Tu siguiente oportunidad</strong><small>Explora vacantes publicadas</small>
+        </div>
+        <span>›</span></a
+      >
+    </aside>
+    <div class="profile-content">
+      <section class="profile-editor">
+        <div class="editor-heading">
+          <div>
+            <h2>Tu información profesional</h2>
+            <p>Completa tu perfil y mantén tu trayectoria al día.</p>
+          </div>
+          <tf-icon name="user" />
+        </div>
+        <div class="pill-tabs" role="tablist" aria-label="Apartados de mi perfil">
+          @for (t of ['contacto', 'educación', 'experiencia', 'habilidades']; track t) {
+            <button
+              role="tab"
+              [attr.aria-selected]="tab() === t"
+              [class.active]="tab() === t"
+              (click)="tab.set(t)"
+            >
+              {{ t }}
+            </button>
+          }
+        </div>
+        @if (actionError()) {
+          <p class="auth-message" role="alert">{{ actionError() }}</p>
+        }
+        @switch (tab()) {
+          @case ('contacto') {
+            <tf-data-form
+              [fields]="contactFields"
+              [values]="values()"
+              [busy]="busy()"
+              label="Guardar perfil"
+              (submitted)="saveContact($event)"
+            />
+          }
+          @case ('educación') {
+            @if (profile()) {
+              <tf-data-form
+                prefix="education"
+                [fields]="educationFields"
+                [busy]="busy()"
+                label="Agregar educación"
+                (submitted)="add('educaciones', $event)"
+              />
+            } @else {
+              <p>Guarda primero tus datos de contacto.</p>
+            }
+          }
+          @case ('experiencia') {
+            @if (profile()) {
+              <tf-data-form
+                prefix="experience"
+                [fields]="experienceFields"
+                [busy]="busy()"
+                label="Agregar experiencia"
+                (submitted)="add('experiencias', $event)"
+              />
+            } @else {
+              <p>Guarda primero tus datos de contacto.</p>
+            }
+          }
+          @case ('habilidades') {
+            @if (profile()) {
+              <tf-data-form
+                prefix="skills"
+                [fields]="skillFields"
+                [busy]="busy()"
+                label="Agregar habilidad"
+                (submitted)="add('habilidades', $event)"
+              />
+            } @else {
+              <p>Guarda primero tus datos de contacto.</p>
+            }
+          }
+        }
+      </section>
+      <div class="profile-records">
+        <section class="panel">
+          <div class="record-heading">
+            <span><tf-icon name="graduation" /></span>
+            <h2>Educación</h2>
+          </div>
+          @for (e of profile()?.educaciones; track e.id) {
+            <article class="record">
+              <strong>{{ e.titulo }}</strong>
+              <p>{{ e.institucion }}</p>
+              <small>{{ e.nivelEducacion?.replaceAll('_', ' ') }}</small>
+            </article>
+          } @empty {
+            <div class="record-empty">
+              <p>Tu formación también habla de tu potencial.</p>
+              <button class="text-action" (click)="tab.set('educación')">
+                Agregar educación <span>+</span>
+              </button>
+            </div>
+          }
+        </section>
+        <section class="panel">
+          <div class="record-heading cyan">
+            <span><tf-icon name="briefcase" /></span>
+            <h2>Experiencia y proyectos</h2>
+          </div>
+          @for (e of profile()?.experiencias; track e.id) {
+            <article class="record">
+              <strong>{{ e.cargo }}</strong>
+              <p>{{ e.empresa }}</p>
+              <small>{{ e.descripcion }}</small>
+            </article>
+          } @empty {
+            <div class="record-empty">
+              <p>Los proyectos académicos y actividades formativas también cuentan.</p>
+              <button class="text-action" (click)="tab.set('experiencia')">
+                Agregar experiencia <span>+</span>
+              </button>
+            </div>
+          }
+        </section>
+        <section class="panel skills-panel">
+          <div class="record-heading pink">
+            <span><tf-icon name="spark" /></span>
+            <h2>Habilidades y competencias</h2>
+          </div>
+          <div class="row">
+            @for (h of profile()?.habilidades; track h.id) {
+              <span class="skill-chip"
+                >{{ h.nombre }}<small>{{ h.nivelDominio }}</small></span
+              >
+            } @empty {
+              <div class="record-empty">
+                <p>Comparte las herramientas y competencias que manejas.</p>
+                <button class="text-action" (click)="tab.set('habilidades')">
+                  Agregar habilidad <span>+</span>
+                </button>
+              </div>
+            }
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
   </div>
 }

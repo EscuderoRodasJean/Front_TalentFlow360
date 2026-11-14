@@ -9,6 +9,20 @@
   }
 </header>
 <section class="filters">
+  <div class="field">
+    <label for="job-location">Lugar de trabajo</label
+    ><select
+      id="job-location"
+      [ngModel]="location()"
+      (ngModelChange)="location.set($event); reset()"
+    >
+      <option value="">Todo el Perú</option>
+      <option>Lima</option>
+      <option>Arequipa</option>
+      <option>Trujillo</option>
+      <option>Cusco</option>
+    </select>
+  </div>
   <div class="field search">
     <label for="job-search">Puesto, empresa o lugar</label
     ><input

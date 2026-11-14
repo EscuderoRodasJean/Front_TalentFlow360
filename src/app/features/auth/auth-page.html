@@ -1,0 +1,158 @@
+<header class="auth-header">
+  <tf-brand /><a routerLink="/" class="return-home">Volver al inicio <tf-icon name="arrow" /></a>
+</header>
+<main class="auth-main">
+  <div class="auth-card">
+    <aside class="auth-story">
+      <span class="story-kicker">EL COMIENZO DE ALGO TUYO</span>
+      <h1>Tu potencial.<br />Tus oportunidades.<br /><em>Tu siguiente paso.</em></h1>
+      <img
+        src="/images/proceso-banner-720.webp"
+        alt="Ilustración de un portafolio profesional con una tarjeta de perfil"
+        width="360"
+        height="290"
+      />
+      <div class="story-feature">
+        <span><tf-icon name="spark" /></span>
+        <p>
+          <strong>Más claridad para avanzar</strong>Matching explicable, estados visibles y
+          retroalimentación del proceso.
+        </p>
+      </div>
+    </aside>
+    <section class="auth-form-panel">
+      <h2>{{ register ? 'Crea tu cuenta' : 'Ingresa a tu cuenta' }}</h2>
+      <p class="auth-subtitle">
+        {{
+          register
+            ? 'Dale un lugar a todo lo que sabes.'
+            : 'Qué bueno verte. Tu próximo paso te espera.'
+        }}
+      </p>
+      @if (!register) {
+        <div class="access-tabs" role="tablist" aria-label="Tipo de acceso">
+          <button
+            role="tab"
+            [attr.aria-selected]="access() === 'postulante'"
+            [class.active]="access() === 'postulante'"
+            (click)="access.set('postulante')"
+          >
+            <tf-icon name="user" />Soy postulante</button
+          ><button
+            role="tab"
+            [attr.aria-selected]="access() === 'equipo'"
+            [class.active]="access() === 'equipo'"
+            (click)="access.set('equipo')"
+          >
+            <tf-icon name="briefcase" />Equipo de selección
+          </button>
+        </div>
+        <p class="access-caption">
+          {{
+            access() === 'equipo'
+              ? 'Acceso para reclutadores, evaluadores, coordinadores y administradores.'
+              : 'Ingresa con el correo registrado en tu perfil de postulante.'
+          }}
+        </p>
+        <div class="social-access" aria-describedby="provider-note">
+          <button type="button" disabled>
+            <span class="google-g">G</span>Continuar con Google <small>Próximamente</small></button
+          ><button type="button" disabled>
+            <span class="linkedin-in">in</span>Acceder con LinkedIn <small>Próximamente</small>
+          </button>
+        </div>
+        <small id="provider-note" class="provider-note"
+          >Estos accesos aún no están disponibles. Usa tu correo para ingresar.</small
+        >
+        <div class="email-divider"><span></span>o con tu correo<span></span></div>
+      }
+      @if (error()) {
+        <div class="auth-message" role="alert">{{ error() }}</div>
+      }
+      @if (register) {
+        <tf-data-form
+          prefix="register"
+          [fields]="fields"
+          [busy]="busy()"
+          label="Crear cuenta"
+          (submitted)="submit($event)"
+        />
+        <p class="register-note">
+          <tf-icon name="shield" />El registro público crea una cuenta de postulante.
+        </p>
+      } @else {
+        <form [formGroup]="loginForm" (ngSubmit)="submitLogin()" class="login-form" novalidate>
+          <div class="field">
+            <label for="login-email">Correo electrónico</label>
+            <div class="input-with-icon">
+              <tf-icon name="user" /><input
+                id="login-email"
+                type="email"
+                formControlName="email"
+                placeholder="Ingresa tu correo electrónico"
+                autocomplete="username"
+                [attr.aria-invalid]="
+                  loginForm.controls.email.touched && loginForm.controls.email.invalid
+                "
+                aria-describedby="email-error"
+              />
+            </div>
+            <small id="email-error" class="invalid">{{
+              loginForm.controls.email.touched && loginForm.controls.email.invalid
+                ? 'Introduce un correo electrónico válido.'
+                : ''
+            }}</small>
+          </div>
+          <div class="field">
+            <label for="login-password">Contraseña</label>
+            <div class="input-with-icon">
+              <tf-icon name="lock" /><input
+                id="login-password"
+                [type]="showPassword() ? 'text' : 'password'"
+                formControlName="password"
+                placeholder="Ingresa tu contraseña"
+                autocomplete="current-password"
+              /><button
+                type="button"
+                class="password-toggle"
+                [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                [attr.aria-pressed]="showPassword()"
+                (click)="showPassword.set(!showPassword())"
+              >
+                <tf-icon [name]="showPassword() ? 'eye-off' : 'eye'" />
+              </button>
+            </div>
+          </div>
+          <button type="button" class="recovery-link" (click)="help.set(!help())">
+            ¿Necesitas ayuda para ingresar?
+          </button>
+          @if (help()) {
+            <p class="recovery-note" role="status">
+              La recuperación automática aún no está disponible. Solicita asistencia al
+              administrador de TalentFlow360.
+            </p>
+          }
+          <button
+            class="btn primary login-submit"
+            type="submit"
+            [disabled]="loginForm.invalid || busy()"
+          >
+            {{ busy() ? 'Ingresando…' : 'Iniciar sesión' }}
+          </button>
+        </form>
+      }
+      <p class="register-link">
+        {{ register ? '¿Ya tienes una cuenta?' : '¿Todavía no tienes cuenta?' }}
+        <a [routerLink]="register ? '/ingresar' : '/registro'">{{
+          register ? 'Inicia sesión' : 'Regístrate como postulante'
+        }}</a>
+      </p>
+      <div class="session-note">
+        <tf-icon name="shield" /><small
+          >Tu sesión se mantiene mientras usas la aplicación. Al recargar, vuelve a ingresar.</small
+        >
+      </div>
+    </section>
+  </div>
+</main>
+<tf-footer />

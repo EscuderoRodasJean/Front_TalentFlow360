@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { TalentApi } from '../../core/api/talent-api';
@@ -21,7 +21,9 @@ export class Vacancies {
   readonly jobs = signal<VacanteDTO[]>([]);
   readonly loading = signal(false);
   readonly error = signal('');
-  readonly query = signal('');
+  private readonly route = inject(ActivatedRoute);
+  readonly query = signal(this.route.snapshot.queryParamMap.get('q') ?? '');
+  readonly location = signal(this.route.snapshot.queryParamMap.get('ubicacion') ?? '');
   readonly mode = signal('');
   readonly state = signal('');
   readonly page = signal(1);
@@ -30,6 +32,8 @@ export class Vacancies {
       (v) =>
         (this.auth.role() !== 'POSTULANTE' || v.estado === 'PUBLICADA') &&
         (!this.mode() || v.modalidad === this.mode()) &&
+        (!this.location() ||
+          (v.ubicacion ?? '').toLowerCase().includes(this.location().toLowerCase())) &&
         (!this.state() || v.estado === this.state()) &&
         [v.titulo, v.empresa, v.ubicacion]
           .join(' ')

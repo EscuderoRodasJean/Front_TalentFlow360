@@ -1,49 +1,96 @@
 <a href="#content" class="skip">Ir al contenido</a>
-<aside class="sidebar" [class.open]="open()">
-  <a class="brand" routerLink="/app/inicio"
-    ><span class="brand-mark">↗</span>talentflow<span class="version">360</span></a
-  >
-  <span class="workspace"
-    >ESPACIO DE {{ auth.role() === 'POSTULANTE' ? 'TALENTO' : 'SELECCIÓN' }}</span
-  >
-  <nav aria-label="Navegación principal">
-    @for (link of links; track link.path) {
-      @if (!link.roles || auth.has(link.roles)) {
-        <a [routerLink]="'/app/' + link.path" routerLinkActive="active" (click)="open.set(false)"
-          ><tf-icon [name]="link.icon" />{{ link.label }}</a
+<header class="portal-header">
+  <div class="topbar">
+    <tf-brand link="/app/inicio" />
+    <div class="header-actions">
+      <a
+        class="process-shortcut"
+        routerLink="/app/postulaciones"
+        aria-label="Ver actividad de mis procesos"
+        ><tf-icon name="layers" /><span>Mis procesos</span></a
+      ><span class="header-separator"></span>
+      <div class="account" data-account-menu>
+        <button
+          #accountButton
+          class="account-trigger"
+          aria-label="Abrir menú de cuenta"
+          aria-haspopup="dialog"
+          [attr.aria-expanded]="accountOpen()"
+          aria-controls="account-panel"
+          (click)="toggleAccount()"
         >
-      }
-    }
-  </nav>
-  <div class="side-note">
-    <span>Un proceso más claro.</span>
-    <p>Cada oportunidad, cada decisión y cada siguiente paso.</p>
-    <tf-icon name="spark" />
-  </div>
-  <button class="logout" (click)="logout()"><tf-icon name="logout" />Cerrar sesión</button>
-</aside>
-@if (open()) {
-  <button class="scrim" aria-label="Cerrar menú" (click)="open.set(false)"></button>
-}
-<div class="workspace-body">
-  <header class="topbar">
-    <div class="row">
+          <span class="avatar">{{ auth.name().slice(0, 1) }}</span><span class="trigger-name">{{
+            auth.name().split(' ')[0]
+          }}</span
+          ><tf-icon name="chevron" />
+        </button>
+        @if (accountOpen()) {
+          <section
+            #accountPanel
+            class="account-panel"
+            id="account-panel"
+            role="dialog"
+            aria-label="Opciones de cuenta"
+          >
+            <button
+              class="menu-close"
+              aria-label="Cerrar menú de cuenta"
+              (click)="closeAccount(true)"
+            >
+              <tf-icon name="close" />
+            </button>
+            <div class="account-info">
+              <span class="avatar large">{{ auth.name().slice(0, 1) }}</span>
+              <div>
+                <strong>{{ auth.name() }}</strong><small>{{ auth.session()?.email }}</small
+                ><span>{{ label(auth.role()) }}</span>
+              </div>
+            </div>
+            <nav aria-label="Opciones de cuenta">
+              @for (link of links; track link.path) {
+                @if (!link.roles || auth.has(link.roles)) {
+                  <a [routerLink]="'/app/' + link.path" (click)="closeNavigation()"
+                    ><tf-icon [name]="link.icon" />{{ link.label }}</a
+                  >
+                }
+              }
+            </nav>
+            <button class="account-logout" (click)="logout()">
+              <tf-icon name="logout" />Cerrar sesión
+            </button>
+          </section>
+        }
+      </div>
       <button
-        class="mobile-menu btn quiet"
+        class="mobile-menu"
         aria-label="Abrir menú"
         [attr.aria-expanded]="open()"
-        (click)="open.set(!open())"
+        (click)="open.set(!open()); closeAccount()"
       >
-        <tf-icon name="menu" /></button
-      ><span class="top-crumb">Tu siguiente paso empieza aquí</span>
+        <tf-icon name="menu" />
+      </button>
     </div>
-    <div class="identity">
-      <span class="avatar">{{ auth.name().slice(0, 1) }}</span><span
-        ><strong>{{ auth.name() }}</strong
-        ><small>{{ label(auth.role()) }}</small></span
-      >
-    </div>
-  </header>
-  <main id="content"><router-outlet /></main>
-  <footer>TalentFlow360 <span>Prácticas con propósito. Procesos con transparencia.</span></footer>
-</div>
+  </div>
+  <div class="nav-container">
+    <nav class="primary-navigation" aria-label="Navegación principal" [class.open]="open()">
+      @for (link of links; track link.path) {
+        @if (!link.roles || auth.has(link.roles)) {
+          <a
+            [routerLink]="'/app/' + link.path"
+            routerLinkActive="active"
+            (click)="closeNavigation()"
+            ><tf-icon [name]="link.icon" />{{ link.label }}</a
+          >
+        }
+      }
+    </nav>
+    <span class="workspace-tag">{{
+      auth.role() === 'POSTULANTE' ? 'ESPACIO DE TALENTO' : 'EQUIPO DE SELECCIÓN'
+    }}</span>
+  </div>
+</header>
+@if (open()) {
+  <button class="mobile-scrim" aria-label="Cerrar menú" (click)="open.set(false)"></button>
+}
+<main id="content" class="portal-content"><router-outlet /></main>
+<tf-footer />

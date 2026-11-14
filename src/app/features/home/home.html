@@ -1,0 +1,229 @@
+<div class="personal-space">
+  <aside class="profile-rail">
+    <section class="profile-card">
+      <span class="profile-avatar">{{ auth.name().slice(0, 1) }}<i></i></span>
+      <h1>{{ auth.name() }}</h1>
+      <p>
+        {{
+          auth.role() === 'POSTULANTE'
+            ? 'Mi próximo paso profesional'
+            : 'Equipo de selección TalentFlow360'
+        }}
+      </p>
+      <a
+        class="btn primary"
+        [routerLink]="auth.role() === 'POSTULANTE' ? '/app/perfil' : '/app/postulaciones'"
+        >{{ auth.role() === 'POSTULANTE' ? 'Ir a mi perfil' : 'Ver procesos asignados' }}</a
+      >
+    </section>
+    @if (auth.role() === 'POSTULANTE') {
+      <section class="rail-card completeness">
+        <tf-icon name="resume" />
+        <h2>Tu perfil abre puertas</h2>
+        @if (profileError()) {
+          <p class="rail-error">No pudimos consultar tu perfil.</p>
+          <button class="text-action" (click)="loadProfile()">Volver a intentar</button>
+        } @else {
+          <strong>{{ profile()?.porcentajeCompletitud || 0 }}<small>% completo</small></strong>
+          <div class="score">
+            <span [style.width.%]="profile()?.porcentajeCompletitud || 0"></span>
+          </div>
+          <p>
+            {{
+              profile()?.perfilCompleto
+                ? 'Tu perfil está listo para nuevas oportunidades.'
+                : 'Agrega tu experiencia, formación y habilidades.'
+            }}
+          </p>
+          <a routerLink="/app/perfil"
+            >{{ profile()?.perfilCompleto ? 'Revisar mi perfil' : 'Completar mi información' }}
+            <span>›</span></a
+          >
+        }
+      </section>
+    }
+    <section class="rail-card transparent">
+      <span class="rail-illustration"><tf-icon name="shield" /></span>
+      <h2>Conoce el porqué de tu matching</h2>
+      <p>Requisitos visibles y puntajes que se pueden explicar.</p>
+      <a routerLink="/app/postulaciones">Ver mis procesos <span>›</span></a>
+    </section>
+  </aside>
+  <div class="space-main">
+    <section class="search-banner">
+      <div class="banner-decoration" aria-hidden="true">
+        <img src="/images/proceso-banner-720.webp" alt="" width="320" height="260" />
+      </div>
+      <h2>
+        ¡Hola, {{ auth.name().split(' ')[0] }}! <span>¿Dónde quieres dar tu siguiente paso?</span>
+      </h2>
+      <p>Oportunidades, competencias y un proceso que puedes seguir.</p>
+      <tf-opportunity-search (searched)="search($event)" /><span class="banner-note"
+        ><tf-icon name="check" />Tu siguiente oportunidad empieza con lo que sabes.</span
+      >
+    </section>
+    <tf-category-links />
+    @if (tip()) {
+      <section class="profile-tip">
+        <div>
+          <strong>Un consejo para tu próximo paso</strong>
+          <p>
+            {{
+              auth.role() === 'POSTULANTE'
+                ? 'Mantén tu información actualizada. Tus habilidades y proyectos ayudan a explicar tu compatibilidad.'
+                : 'Una retroalimentación clara ayuda a cada postulante a saber cómo seguir creciendo.'
+            }}
+          </p>
+        </div>
+        <span class="tip-icon"><tf-icon name="resume" /></span
+        ><button aria-label="Cerrar consejo" (click)="tip.set(false)">
+          <tf-icon name="close" />
+        </button>
+      </section>
+    }
+    <div class="content-tabs" role="tablist" aria-label="Explorar oportunidades">
+      <button
+        role="tab"
+        [attr.aria-selected]="tab() === 'vacantes'"
+        [class.active]="tab() === 'vacantes'"
+        (click)="tab.set('vacantes')"
+      >
+        Oportunidades</button
+      ><button
+        role="tab"
+        [attr.aria-selected]="tab() === 'empresas'"
+        [class.active]="tab() === 'empresas'"
+        (click)="tab.set('empresas')"
+      >
+        Empresas
+      </button>
+    </div>
+    <tf-async-state [loading]="loading()" [error]="error()" (retry)="load()" />
+    @if (!loading() && !error()) {
+      @if (tab() === 'vacantes') {
+        <section class="explore-section">
+          <div class="section-title">
+            <h2><tf-icon name="spark" />Oportunidades para explorar</h2>
+            <a routerLink="/app/vacantes">Ver todas <span>›</span></a>
+          </div>
+          <div class="opportunity-list">
+            @for (job of opportunities(); track job.id) {
+              <a class="opportunity-row" [routerLink]="['/app/vacantes', job.id]"
+                ><span class="row-company">{{ job.empresa?.slice(0, 2)?.toUpperCase() }}</span>
+                <div class="row-details">
+                  <span class="published">{{
+                    job.fechaPublicacion
+                      ? 'Publicada el ' + (job.fechaPublicacion | date: 'dd/MM/yyyy')
+                      : 'Oportunidad publicada'
+                  }}</span>
+                  <h3>{{ job.titulo }}</h3>
+                  <strong>{{ job.empresa }}</strong>
+                  <div class="requirement-tags">
+                    @for (r of job.requisitos?.slice(0, 2); track r.id) {
+                      <span>{{ r.nombre }}</span>
+                    }
+                  </div>
+                </div>
+                <div class="row-location">
+                  <span><tf-icon name="pin" />{{ job.ubicacion || 'Por definir' }}</span
+                  ><span><tf-icon name="briefcase" />{{ job.modalidad }}</span
+                  ><span class="view-opportunity"
+                    >Ver oportunidad <tf-icon name="arrow"
+                  /></span></div
+              ></a>
+            } @empty {
+              <section class="empty">
+                <tf-icon name="briefcase" />
+                <h3>Las próximas oportunidades estarán aquí.</h3>
+                <p>Cuando se publiquen vacantes, podrás explorarlas desde tu espacio.</p>
+              </section>
+            }
+          </div>
+        </section>
+      } @else {
+        <section class="explore-section">
+          <div class="section-title">
+            <h2><tf-icon name="briefcase" />Equipos con oportunidades publicadas</h2>
+          </div>
+          <div class="company-grid">
+            @for (job of companies(); track job.empresa) {
+              <a routerLink="/app/vacantes" [queryParams]="{ q: job.empresa }"
+                ><span>{{ job.empresa?.slice(0, 2)?.toUpperCase() }}</span
+                ><strong>{{ job.empresa }}</strong
+                ><small>Ver oportunidades <tf-icon name="arrow" /></small
+              ></a>
+            } @empty {
+              <div class="empty">Todavía no hay empresas con vacantes publicadas.</div>
+            }
+          </div>
+        </section>
+      }
+    }
+    <section class="process-explainer">
+      <tf-icon name="layers" />
+      <div>
+        <h2>Tu proceso tiene una historia.</h2>
+        <p>Consulta cada cambio de estado, su fecha y el motivo registrado.</p>
+      </div>
+      <a routerLink="/app/postulaciones">Ver postulaciones <span>›</span></a>
+    </section>
+  </div>
+  <aside class="activity-rail">
+    <h2>Mi actividad</h2>
+    @if (auth.role() === 'POSTULANTE' || auth.role() === 'EVALUADOR') {
+      <section class="activity-card">
+        <strong
+          >{{ rows()?.length ?? '—' }}
+          {{
+            auth.role() === 'EVALUADOR'
+              ? rows()?.length === 1
+                ? 'Proceso asignado'
+                : 'Procesos asignados'
+              : rows()?.length === 1
+                ? 'Postulación'
+                : 'Postulaciones'
+          }}</strong
+        ><small>En tus procesos registrados</small>
+        <p>
+          <b>{{ active() ?? '—' }}</b> En curso
+        </p>
+        <p>
+          <b>{{ closed() ?? '—' }}</b> Finalizados
+        </p>
+        @if (activityError()) {
+          <small class="rail-error">No pudimos consultar tu actividad.</small>
+        }
+      </section>
+      <a class="activity-link" routerLink="/app/postulaciones"
+        >Ir a mis postulaciones <span>›</span></a
+      >
+    }
+    <section class="activity-card next-step">
+      <span class="activity-icon"><tf-icon name="calendar" /></span
+      ><strong>Prepárate para el siguiente paso</strong>
+      <p>
+        {{
+          auth.role() === 'POSTULANTE'
+            ? 'Revisa el historial de tus procesos para conocer su avance.'
+            : 'Consulta tu agenda y organiza los encuentros del proceso.'
+        }}
+      </p>
+      <a [routerLink]="auth.role() === 'POSTULANTE' ? '/app/postulaciones' : '/app/entrevistas'"
+        >{{ auth.role() === 'POSTULANTE' ? 'Ver mis procesos' : 'Ver agenda' }} <span>›</span></a
+      >
+    </section>
+    @if (auth.has(managers)) {
+      <section class="activity-card">
+        <span class="activity-icon purple"><tf-icon name="chart" /></span
+        ><strong>Indicadores con contexto</strong>
+        <p>Completitud, tiempos y seguimiento del proceso.</p>
+        <a routerLink="/app/indicadores">Consultar indicadores <span>›</span></a>
+      </section>
+    }
+    <div class="side-footer">
+      <tf-icon name="shield" />
+      <p>Matching basado en competencias profesionales.</p>
+      <span>TalentFlow360</span>
+    </div>
+  </aside>
+</div>

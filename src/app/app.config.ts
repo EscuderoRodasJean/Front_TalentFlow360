@@ -12,7 +12,10 @@ import { authInterceptor } from './core/api/http-interceptors';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })),
+    provideRouter(
+      routes,
+      withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' }),
+    ),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAppInitializer(() => inject(ApiConfig).load()),
   ],

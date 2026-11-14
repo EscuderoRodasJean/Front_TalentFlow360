@@ -14,5 +14,7 @@ export const roleGuard: CanActivateChildFn = (route, state) => {
   return !roles || auth.has(roles) || router.createUrlTree(['/sin-acceso']);
 };
 export function safeReturnUrl(value: string | null): string {
-  return value?.startsWith('/app/') && !value.includes('://') ? value : '/app/inicio';
+  return value?.startsWith('/app/') && !value.includes('://') && !value.startsWith('/app//')
+    ? value
+    : '/app/inicio';
 }
