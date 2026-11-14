@@ -55,7 +55,8 @@ test('directorio público filtra empresas y abre su ficha oficial', async ({ pag
     .locator('.company-result')
     .getByRole('link', { name: /Conocer empresa/ })
     .click();
-  await expect(page.getByRole('heading', { name: 'Gloria', exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/\/empresas\/gloria$/);
+  await expect(page.getByRole('heading', { name: 'Gloria', level: 1, exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Visitar sitio oficial' })).toHaveAttribute(
     'href',
     'https://www.gloria.com.pe/',
