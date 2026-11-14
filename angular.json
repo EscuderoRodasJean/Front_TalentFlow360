@@ -8,7 +8,11 @@
   "projects": {
     "frontend-talentflow360": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -24,7 +28,10 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css"]
+            "styles": [
+              "src/styles.scss"
+            ],
+            "inlineStyleLanguage": "scss"
           },
           "configurations": {
             "production": {
@@ -60,7 +67,10 @@
               "buildTarget": "frontend-talentflow360:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          }
         },
         "test": {
           "builder": "@angular/build:unit-test"
