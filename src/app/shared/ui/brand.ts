@@ -4,10 +4,9 @@ import { RouterLink } from '@angular/router';
   selector: 'tf-brand',
   imports: [RouterLink],
   template: `<a class="tf-brand" [routerLink]="link()" aria-label="TalentFlow360, inicio"
-    ><svg viewBox="0 0 35 38" aria-hidden="true">
-      <path d="m5 5 14 14L5 33" stroke="#b546e8" stroke-width="7" />
-      <path d="m13 5 14 14-14 14" stroke="#2639e8" stroke-width="7" />
-      <path d="m4 5 14 14" stroke="#22ced3" stroke-width="4" /></svg
+    ><svg viewBox="0 0 40 44" aria-hidden="true">
+      <path fill="#2639e8" d="M0 0h40v30L20 44 0 30Z" />
+      <path stroke="#e7e7ff" stroke-width="4" fill="none" d="m11 29 18-18M13 11h16v16" /></svg
     ><span>talentflow<strong>360</strong></span></a
   >`,
   styles: [

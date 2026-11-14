@@ -158,46 +158,58 @@
   display: flex;
   gap: 12px;
   align-items: center;
-  border: 1px solid #e4e7f1;
+  border: 1px solid #dadce0;
   border-radius: 7px;
   background: #fff;
   padding: 10px 12px;
-  color: #838aa5;
+  color: #3c4043;
   font-size: 13px;
   font-weight: 600;
-  cursor: not-allowed;
+  cursor: pointer;
   opacity: 1;
+  min-height: 46px;
+  justify-content: center;
+  transition:
+    background 0.15s,
+    box-shadow 0.15s;
 }
-.social-access button small {
-  font-size: 7px;
-  color: #a3a8bc;
-  background: #f3f4f9;
-  padding: 3px 5px;
-  border-radius: 4px;
-  margin-left: auto;
-  white-space: nowrap;
+.social-access .google-access:hover {
+  background: #f8faff;
+  box-shadow: 0 2px 7px #26337813;
+}
+.social-access .linkedin-access {
+  background: #0a66c2;
+  border-color: #0a66c2;
+  color: #fff;
+}
+.social-access .linkedin-access:hover {
+  background: #084f96;
+  border-color: #084f96;
 }
 .google-g {
-  font-family: Arial, sans-serif;
-  font-size: 18px;
-  font-weight: 750;
-  color: #7296ca;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
 .linkedin-in {
-  background: #6c9fc4;
+  background: #fff;
   font-family: Arial, sans-serif;
-  font-size: 15px;
-  color: white;
+  font-size: 17px;
+  color: #0a66c2;
   font-weight: bold;
   border-radius: 3px;
   padding: 0 3px;
 }
 .provider-note {
   display: block;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.7;
-  color: #a3a7bc;
+  color: #566281;
   margin-top: 8px;
+  margin-bottom: 0;
+  padding: 10px 12px;
+  border-radius: 7px;
+  background: #f1f4ff;
 }
 .email-divider {
   display: flex;

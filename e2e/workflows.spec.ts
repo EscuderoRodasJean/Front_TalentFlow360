@@ -203,8 +203,17 @@ test('login permite mostrar contraseña y explica proveedores aún no integrados
 }) => {
   await page.goto('/ingresar');
   await expect(page.getByRole('button', { name: 'Iniciar sesión', exact: true })).toBeDisabled();
-  await expect(page.getByRole('button', { name: /Continuar con Google/ })).toBeDisabled();
-  await expect(page.getByRole('button', { name: /Acceder con LinkedIn/ })).toBeDisabled();
+  await expect(page.getByRole('button', { name: /Continuar con Google/ })).toBeEnabled();
+  await expect(page.getByRole('button', { name: /Acceder con LinkedIn/ })).toBeEnabled();
+  await page.getByRole('button', { name: /Continuar con Google/ }).click();
+  await expect(page.getByRole('status')).toContainText(
+    'El acceso con Google aún no está disponible.',
+  );
+  await page.getByRole('button', { name: /Acceder con LinkedIn/ }).click();
+  await expect(page.getByRole('status')).toContainText(
+    'El acceso con LinkedIn aún no está disponible.',
+  );
+  await expect(page).toHaveURL(/\/ingresar$/);
   await page.getByRole('tab', { name: 'Equipo de selección', exact: true }).click();
   await expect(
     page.getByText('Acceso para reclutadores, evaluadores, coordinadores y administradores.'),
@@ -214,8 +223,10 @@ test('login permite mostrar contraseña y explica proveedores aún no integrados
   await expect(page.getByLabel('Contraseña', { exact: true })).toHaveAttribute('type', 'text');
   await page.getByRole('button', { name: 'Ocultar contraseña' }).click();
   await page.getByLabel('Contraseña', { exact: true }).fill('');
-  if (previews)
+  if (previews) {
+    await page.reload();
     await page.screenshot({ path: path.join(previews, '09-ingreso.png'), fullPage: true });
+  }
 });
 test('búsqueda pública conserva puesto y ubicación después de ingresar', async ({ page }) => {
   await backend(page);

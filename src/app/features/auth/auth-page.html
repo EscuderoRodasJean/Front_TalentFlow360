@@ -54,16 +54,33 @@
               : 'Ingresa con el correo registrado en tu perfil de postulante.'
           }}
         </p>
-        <div class="social-access" aria-describedby="provider-note">
-          <button type="button" disabled>
-            <span class="google-g">G</span>Continuar con Google <small>Próximamente</small></button
-          ><button type="button" disabled>
-            <span class="linkedin-in">in</span>Acceder con LinkedIn <small>Próximamente</small>
+        <div class="social-access">
+          <button type="button" class="google-access" (click)="explainProvider('Google')">
+            <svg class="google-g" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                fill="#4285f4"
+                d="M22.56 12.25c0-.73-.06-1.42-.19-2.09H12v3.96h5.92a5.06 5.06 0 0 1-2.2 3.32v2.76h3.56c2.08-1.92 3.28-4.75 3.28-7.95Z"
+              />
+              <path
+                fill="#34a853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.67l-3.56-2.76c-.98.66-2.23 1.06-3.72 1.06-2.87 0-5.3-1.94-6.17-4.54H2.15v2.85A11 11 0 0 0 12 23Z"
+              />
+              <path
+                fill="#fbbc05"
+                d="M5.83 14.09A6.6 6.6 0 0 1 5.48 12c0-.73.13-1.43.35-2.09V7.06H2.15A11 11 0 0 0 1 12c0 1.78.43 3.46 1.15 4.94l3.68-2.85Z"
+              />
+              <path
+                fill="#ea4335"
+                d="M12 5.37c1.62 0 3.07.56 4.21 1.64l3.16-3.16A10.55 10.55 0 0 0 12 1a11 11 0 0 0-9.85 6.06l3.68 2.85C6.7 7.31 9.13 5.37 12 5.37Z"
+              /></svg
+            >Continuar con Google</button
+          ><button type="button" class="linkedin-access" (click)="explainProvider('LinkedIn')">
+            <span class="linkedin-in" aria-hidden="true">in</span>Acceder con LinkedIn
           </button>
         </div>
-        <small id="provider-note" class="provider-note"
-          >Estos accesos aún no están disponibles. Usa tu correo para ingresar.</small
-        >
+        @if (providerNotice()) {
+          <p class="provider-note" role="status">{{ providerNotice() }}</p>
+        }
         <div class="email-divider"><span></span>o con tu correo<span></span></div>
       }
       @if (error()) {

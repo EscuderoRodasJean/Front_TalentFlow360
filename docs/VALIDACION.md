@@ -43,6 +43,6 @@ Las pruebas se repitieron tras cada corrección relevante. El último build, las
 
 ## Rediseño del portal
 
-Se comprobaron el menú del avatar (cierre al pulsar Escape y restauración de foco), las pestañas de empresas/oportunidades, el selector de acceso, los proveedores sociales deshabilitados, la visibilidad de contraseña y la conservación de filtros tras login. Se verificó ausencia de desplazamiento horizontal en portada y espacio personal a 390 px. Las capturas v2 muestran la aplicación en Chromium con datos de prueba aislados.
+Se comprobaron el menú del avatar (cierre al pulsar Escape y restauración de foco), las pestañas de empresas/oportunidades, el selector de acceso, los botones sociales a color con aviso informativo, la visibilidad de contraseña y la conservación de filtros tras login. Se verificó ausencia de desplazamiento horizontal en portada y espacio personal a 390 px. Las capturas v2 muestran la aplicación en Chromium con datos de prueba aislados.
 
 Las dos imágenes de producción ocupan aproximadamente 316 kB en total. Se generaron con la herramienta integrada ImageGen y se optimizaron en WebP; no se incluyen las versiones PNG originales en el bundle público.

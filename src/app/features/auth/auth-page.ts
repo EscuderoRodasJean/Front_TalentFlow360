@@ -27,6 +27,7 @@ export class AuthPage {
   readonly error = signal('');
   readonly showPassword = signal(false);
   readonly help = signal(false);
+  readonly providerNotice = signal('');
   readonly access = signal(
     this.route.snapshot.queryParamMap.get('acceso') === 'equipo' ? 'equipo' : 'postulante',
   );
@@ -56,6 +57,11 @@ export class AuthPage {
   submitLogin() {
     this.loginForm.markAllAsTouched();
     if (this.loginForm.valid) this.submit(this.loginForm.getRawValue());
+  }
+  explainProvider(provider: 'Google' | 'LinkedIn') {
+    this.providerNotice.set(
+      `El acceso con ${provider} aún no está disponible. Por ahora, ingresa con tu correo y contraseña.`,
+    );
   }
   submit(value: FormValue) {
     if (this.busy()) return;

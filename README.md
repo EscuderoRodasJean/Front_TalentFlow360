@@ -52,7 +52,7 @@ Los componentes se cargan por ruta. El JWT se conserva en memoria y se elimina a
 
 ## Diseño del portal
 
-Portada con banner ilustrado, búsqueda por puesto y ubicación, áreas profesionales y footer. El espacio personal presenta resumen de perfil, oportunidades, empresas de la API y actividad del usuario. La cabecera ofrece un menú accesible al pulsar el avatar. El perfil conserva sus formularios en la nueva composición. Las opciones Google/LinkedIn están visibles pero deshabilitadas hasta integrar OAuth en Spring. Los detalles de generación de imágenes están en [recursos visuales](docs/recursos-visuales.json).
+Portada con banner ilustrado, búsqueda por puesto y ubicación, áreas profesionales y footer. El espacio personal presenta resumen de perfil, oportunidades, empresas de la API y actividad del usuario. La cabecera ofrece un menú accesible al pulsar el avatar. El perfil conserva sus formularios en la nueva composición. Los botones de Google/LinkedIn tienen sus colores habituales y muestran un aviso al pulsarlos hasta integrar OAuth en Spring. Los detalles de generación de imágenes están en [recursos visuales](docs/recursos-visuales.json).
 
 ## Estado de integración
 

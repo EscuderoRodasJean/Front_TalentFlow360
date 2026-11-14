@@ -54,9 +54,9 @@ La API actual devuelve arrays completos y no soporta paginación ni filtros de s
 
 ## Identidad visual
 
-Fondo gris azulado `#eef1f8`, azul principal `#2639e8` y degradados rosa, violeta y celeste. Tipografía local Segoe UI, cabecera horizontal, menú del avatar y espacio personal en tres columnas. La portada usa ilustraciones 3D propias generadas para TalentFlow360 y optimizadas en WebP. No se usan marcas ni fotografías de las referencias.
+Fondo gris azulado `#eef1f8`, azul principal `#2639e8` y degradados rosa, violeta y celeste. Tipografía local Segoe UI, cabecera horizontal, menú del avatar y espacio personal en tres columnas. El logo conserva el emblema original con flecha ascendente, recoloreado en azul y lavanda para la cabecera y el favicon. La portada usa ilustraciones 3D propias generadas para TalentFlow360 y optimizadas en WebP. No se usan marcas ni fotografías de las referencias.
 
-El selector Postulante/Equipo orienta el acceso, pero no decide el rol: este siempre llega de la sesión validada por el backend. Google y LinkedIn se muestran deshabilitados y marcados como Próximamente porque no existen endpoints OAuth en el backend actual. La ayuda de acceso también informa que la recuperación automática aún no está disponible.
+El selector Postulante/Equipo orienta el acceso, pero no decide el rol: este siempre llega de la sesión validada por el backend. Google y LinkedIn conservan su aspecto habitual a color. Al pulsarlos muestran un aviso de que el acceso aún no está disponible, porque no existen endpoints OAuth en el backend actual. Los botones no autentican ni simulan una sesión. La ayuda de acceso también informa que la recuperación automática aún no está disponible.
 
 Brand, Footer, CategoryLinks y OpportunitySearch son componentes compartidos. El buscador conserva puesto y ubicación a través del login. Las empresas del espacio personal se derivan exclusivamente de las vacantes publicadas que devuelve la API. Los iconos de sectores de la portada son áreas profesionales, no logos de supuestas empresas asociadas.
 

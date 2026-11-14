@@ -12,7 +12,6 @@ import { Brand } from './brand';
           El comienzo de tu historia profesional.<br />Prácticas con criterios claros y seguimiento
           de principio a fin.
         </p>
-        <span class="project-label">Proyecto académico · Datos de demostración</span>
       </section>
       <section>
         <h2>Para tu siguiente paso</h2>
@@ -30,7 +29,7 @@ import { Brand } from './brand';
       </section>
     </div>
     <div class="footer-bottom">
-      <span>© {{ year }} TalentFlow360. Desarrollo Web Integrado.</span
+      <span>© {{ year }} TalentFlow360.</span
       ><span>Hecho para conectar talento y oportunidades.</span>
     </div>
   </footer>`,
