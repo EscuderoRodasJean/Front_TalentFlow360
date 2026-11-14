@@ -4,9 +4,9 @@ Validación local del 14/11/2026. Node 24.19.0, Angular 22.2, Vitest 5.1 y Playw
 
 | Comprobación | Resultado |
 |---|---|
-| `npm run build` | Correcto. Bundle inicial 303,26 kB, transferencia estimada 83,72 kB, rutas diferidas |
+| `npm run build` | Correcto. Bundle inicial 305,79 kB, transferencia estimada 84,51 kB, rutas diferidas |
 | `npm run test:unit` | 36 pruebas correctas, 3 archivos, sin errores no controlados |
-| `npm run test:e2e` | 12 recorridos correctos, 1 worker, 15 s aproximadamente |
+| `npm run test:e2e` | 16 recorridos correctos, 1 worker, 20 s aproximadamente |
 | `npm run format:check` | Correcto |
 | `git diff --check` | Sin errores de espacio en el contenido |
 | Inspección visual | Portada de escritorio y móvil, oportunidades, matching y dashboard |
@@ -39,4 +39,10 @@ Los recorridos de navegador sustituyen `/api/**` por contratos aislados. Demuest
 - Se conserva el perfil actualizado al cambiar entre sus apartados.
 - Los porcentajes sin observaciones se presentan con un guion en vez de afirmar que un cero cumple una meta.
 
-Las pruebas se repitieron tras cada corrección relevante. El último build, las 36 pruebas unitarias y los 12 recorridos corresponden a la versión final de los archivos.
+Las pruebas se repitieron tras cada corrección relevante. El último build, las 36 pruebas unitarias y los 16 recorridos corresponden a la versión final de los archivos.
+
+## Rediseño del portal
+
+Se comprobaron el menú del avatar (cierre al pulsar Escape y restauración de foco), las pestañas de empresas/oportunidades, el selector de acceso, los proveedores sociales deshabilitados, la visibilidad de contraseña y la conservación de filtros tras login. Se verificó ausencia de desplazamiento horizontal en portada y espacio personal a 390 px. Las capturas v2 muestran la aplicación en Chromium con datos de prueba aislados.
+
+Las dos imágenes de producción ocupan aproximadamente 316 kB en total. Se generaron con la herramienta integrada ImageGen y se optimizaron en WebP; no se incluyen las versiones PNG originales en el bundle público.

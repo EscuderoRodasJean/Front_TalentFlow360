@@ -1,0 +1,15 @@
+{
+  "tool": "image_gen (herramienta integrada)",
+  "assets": [
+    {
+      "file": "public/images/talento-hero.webp",
+      "source": "exec-d4df845e-852a-4560-b09a-960e70468707.png",
+      "prompt": "Create a polished premium 3D character illustration asset for TalentFlow360, a university internships and professional skills matching web portal. Intended use: right side of a large website hero on a pastel lavender, pink and cyan gradient; image itself genuinely transparent background. Show TWO friendly young adult Latin American university graduates, one man and one woman, full body, standing together with relaxed confident poses, holding a laptop and a slim professional portfolio. Tasteful stylized Pixar-like 3D proportions but adult professional appearance, natural expressive faces, navy indigo blue and lavender casual smart outfits and white sneakers, subtle backpacks. Behind them a floating oversized glossy translucent blue-violet professional profile card with small abstract horizontal line shapes and a checkmark, no letters or numbers. Surrounding small 3D objects: graduation cap, one bright blue checkmark medallion, a small cyan outlined briefcase. Beautiful soft studio lighting, pastel edge reflections, clean premium rendering and detailed materials. Balanced portrait composition, both people completely visible including shoes, no background ground plane except subtle small contact shadow. NO text, NO logos, NO watermark, NO Bumeran branding. This is a brand asset, not a website screenshot. Transparent PNG cutout."
+    },
+    {
+      "file": "public/images/proceso-banner-720.webp",
+      "source": "exec-743f40d3-6772-4e67-ba68-3c5b641c11f4.png",
+      "prompt": "A premium friendly 3D website banner illustration for TalentFlow360 university internships portal, transparent background. Composition: one glossy blue-violet briefcase with cyan edges, a lavender graduation cap leaning against it, and two small floating professional profile cards with checkmarks. Dynamic diagonally tilted arrangement, professional youthful education and careers feeling, softly lit polished 3D materials with pastel indigo, lavender, blue and aqua tones, subtle soft shadow. Entire isolated cluster completely visible in a compact landscape composition. No people, no robot, no text, no numbers, no logos, no branding, no watermark. A real transparent cutout asset for the right side of a lilac/cyan dashboard search banner."
+    }
+  ]
+}

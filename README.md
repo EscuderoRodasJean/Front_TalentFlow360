@@ -50,6 +50,10 @@ scripts/                consultas de inventario de datos, de solo lectura
 
 Los componentes se cargan por ruta. El JWT se conserva en memoria y se elimina al cerrar sesión o recargar. Se comprueba expiración al navegar y antes de enviar peticiones. Un 401 de recurso cierra la sesión; un 403 mantiene la sesión y explica la falta de permiso. El token solo se adjunta al backend configurado. No hay refresh token porque el backend no ofrece ese contrato.
 
+## Diseño del portal
+
+Portada con banner ilustrado, búsqueda por puesto y ubicación, áreas profesionales y footer. El espacio personal presenta resumen de perfil, oportunidades, empresas de la API y actividad del usuario. La cabecera ofrece un menú accesible al pulsar el avatar. El perfil conserva sus formularios en la nueva composición. Las opciones Google/LinkedIn están visibles pero deshabilitadas hasta integrar OAuth en Spring. Los detalles de generación de imágenes están en [recursos visuales](docs/recursos-visuales.json).
+
 ## Estado de integración
 
 La compilación y las pruebas locales están implementadas. Swagger de Render respondió 200 el 14/11/2026; vacantes y dashboard respondieron 403 sin sesión. **La prueba autenticada contra Render y el conteo de sus registros requieren una cuenta autorizada y/o acceso de lectura a la BD.**

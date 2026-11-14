@@ -54,7 +54,13 @@ La API actual devuelve arrays completos y no soporta paginación ni filtros de s
 
 ## Identidad visual
 
-Fondo marfil `#f6f7f2`, verde petróleo `#123f3a`, lima `#d6ed83`. Tipografía local Segoe UI y acento editorial serif en la portada. Navegación sobria en el espacio de trabajo y una portada más expresiva. El diseño usa formas y SVG simples propios; no copia marcas ni fotografías de las referencias.
+Fondo gris azulado `#eef1f8`, azul principal `#2639e8` y degradados rosa, violeta y celeste. Tipografía local Segoe UI, cabecera horizontal, menú del avatar y espacio personal en tres columnas. La portada usa ilustraciones 3D propias generadas para TalentFlow360 y optimizadas en WebP. No se usan marcas ni fotografías de las referencias.
+
+El selector Postulante/Equipo orienta el acceso, pero no decide el rol: este siempre llega de la sesión validada por el backend. Google y LinkedIn se muestran deshabilitados y marcados como Próximamente porque no existen endpoints OAuth en el backend actual. La ayuda de acceso también informa que la recuperación automática aún no está disponible.
+
+Brand, Footer, CategoryLinks y OpportunitySearch son componentes compartidos. El buscador conserva puesto y ubicación a través del login. Las empresas del espacio personal se derivan exclusivamente de las vacantes publicadas que devuelve la API. Los iconos de sectores de la portada son áreas profesionales, no logos de supuestas empresas asociadas.
+
+Los recursos y sus prompts exactos se registran en `docs/recursos-visuales.json`. El presupuesto de estilos por componente se ajustó al portal visual: advertencia de 12 kB y error de 16 kB. El presupuesto inicial de JavaScript se conserva en 500 kB de advertencia y 1 MB de error.
 
 De las referencias se adoptó la búsqueda por puesto/lugar de Bumeran, la orientación al primer empleo de CVMatcher/PractiMatch y la separación de experiencias de candidatos y empresas de HireClinch. El matching se presenta como comparación de competencias, sin atribuirle IA ni capacidades que el backend no tiene.
 
