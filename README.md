@@ -1,59 +1,63 @@
-# FrontendTalentflow360
+# TalentFlow360 · Frontend Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.7.
+Aplicación Angular 22 standalone, TypeScript estricto y SASS/SCSS para prácticas preprofesionales con matching explicable. Consume el backend Spring Boot existente. La aplicación normal **no tiene un modo demo ni sustituye respuestas de la API por datos inventados**. Los dobles de API solo están en `e2e/`.
 
-## Development server
+## Ejecutar
 
-To start a local development server, run:
+Requisitos: Node 24.15 o posterior compatible con Angular 22 y npm 11. El proyecto fue validado con Node 24.19.0.
 
-```bash
-ng serve
+```powershell
+git clone https://github.com/SamuelHuamanHuillca/FrontEnd_TalentFlow360.git
+cd FrontEnd_TalentFlow360
+npm ci
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Abrir http://localhost:4200. `proxy.conf.json` envía `/api` al backend de Render. El servidor puede tardar en despertar. Se necesita una cuenta real para consultar datos. El registro público crea cuentas POSTULANTE; no incluye cuentas administrativas ni contraseñas precargadas.
 
-## Code scaffolding
+Para backend local, cambiar únicamente el target del proxy a `http://localhost:8080` y reiniciar `npm start`. La URL de producción se configura en `public/config.json` antes del build o en el archivo `config.json` del hosting. Usar `{"apiBaseUrl":"https://bakend-talentflow360.onrender.com/api"}` cuando frontend y backend estén en dominios diferentes. Ese origen debe autorizarse en el CORS de Spring. No poner secretos en este archivo.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Pruebas
 
-```bash
-ng generate component component-name
+```powershell
+npm run test:unit
+npx playwright install chromium
+npm run test:e2e
+npm run format:check
+npm run build
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Playwright inicia un servidor local y sustituye `/api/**` por una API de prueba controlada. No escribe en Render. Para usar un Chromium instalado: definir `PLAYWRIGHT_CHROMIUM_EXECUTABLE` con su ruta. Para generar capturas de diseño: definir `TF_PREVIEW_DIR` con un directorio local. Son capturas de la aplicación real con datos simulados, no evidencia de la base desplegada.
 
-```bash
-ng generate --help
+## Organización
+
+```text
+src/app/
+  core/api/             contratos, configuración y cliente REST tipado
+  core/auth/            sesión, guards y permisos
+  core/feedback/        avisos compartidos
+  layout/               navegación por rol y diseño adaptable
+  shared/forms/         formularios reactivos y listas de criterios
+  shared/ui/            iconos, estados, carga y errores
+  features/
+    welcome/ auth/ home/
+    profile/ vacancies/ applications/
+    interviews/ evaluations/ dashboard/ users/
+e2e/                    contratos de prueba y recorridos de navegador
+docs/                   arquitectura, cobertura y datos históricos
+scripts/                consultas de inventario de datos, de solo lectura
 ```
 
-## Building
+Los componentes se cargan por ruta. El JWT se conserva en memoria y se elimina al cerrar sesión o recargar. Se comprueba expiración al navegar y antes de enviar peticiones. Un 401 de recurso cierra la sesión; un 403 mantiene la sesión y explica la falta de permiso. El token solo se adjunta al backend configurado. No hay refresh token porque el backend no ofrece ese contrato.
 
-To build the project run:
+## Estado de integración
 
-```bash
-ng build
-```
+La compilación y las pruebas locales están implementadas. Swagger de Render respondió 200 el 14/11/2026; vacantes y dashboard respondieron 403 sin sesión. **La prueba autenticada contra Render y el conteo de sus registros requieren una cuenta autorizada y/o acceso de lectura a la BD.**
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+No considerar el sistema listo para producción antes de corregir los problemas de autorización por recurso documentados en [la revisión del backend](docs/BACKEND.md). El frontend no puede sustituir esos controles de Spring Security. La edición de usuarios está identificada como pendiente por un DTO incompatible del backend. La creación y desactivación de cuentas sí tienen flujos conectados.
 
-## Running unit tests
+Ver [arquitectura](docs/ARQUITECTURA.md), [cobertura de requisitos](docs/REQUISITOS.md), [plan de datos](docs/DATOS.md) y [validación](docs/VALIDACION.md).
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Despliegue estático
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+`npm run build` genera `dist/frontend-talentflow360/browser`. Publicar ese directorio y configurar fallback de rutas a `index.html`. Render Static Site puede usar `npm ci && npm run build`, directorio publicado `dist/frontend-talentflow360/browser` y rewrite `/*` a `/index.html`. La publicación y el push a GitHub requieren la aprobación final del propietario.
