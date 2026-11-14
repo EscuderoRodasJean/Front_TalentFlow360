@@ -15,7 +15,7 @@ Validación local del 14/11/2026. Node 24.19.0, Angular 22.2, Vitest 5.1 y Playw
 | Prueba de extremo a extremo con Render autenticado | Pendiente de cuenta de prueba autorizada |
 | Conteo de BD desplegada | Pendiente de ejecutar el inventario con acceso de lectura |
 | Suite del backend Java | No ejecutada en esta revisión |
-| Workflow de GitHub Actions | Configurado, aún no ejecutado en GitHub porque no se ha publicado la rama |
+| Workflow de GitHub Actions | Configurado para push a `main` y pull requests. [Consultar ejecuciones del repositorio publicado](https://github.com/EscuderoRodasJean/Front_TalentFlow360/actions) |
 
 ## Qué verifican las pruebas
 
